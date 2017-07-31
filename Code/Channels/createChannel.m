@@ -3,8 +3,21 @@ function ch = createChannel(fd,T,duration,varargin)
 p = inputParser;
 inputCheck();
 
-% creating channel
-ch = 0;
+%% Extracting inputs
+simulator = p.Results.simulator;
+DurationType = p.Results.DurationType;
+NChannels = p.Results.NChannels;
+
+%% Creating channel
+[sampleDuration,timeDuration] = getDuration(T,duration,DurationType);
+
+switch simulator
+    case 'Jakes'
+        ch = JakesSimulator(fd,T,timeDuration,NChannels);
+    otherwise
+        ch = 0;
+end
+
 %% Argument checker
     function inputCheck()
 
@@ -21,7 +34,7 @@ ch = 0;
         p.addParameter('DurationType','time',...
             @(x)any(validatestring(x,{'time','samples'})));
         p.addParameter('NChannels',1,...
-            @(x)validateattributes(x,'numeric',{'scalar','integer','positive'}));
+            @(x)validateattributes(x,{'numeric'},{'scalar','integer','positive'}));
 
         p.parse(fd,T,duration,varargin{:})
     end
