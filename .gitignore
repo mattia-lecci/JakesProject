@@ -1,0 +1,10 @@
+# Latex
+*.synctex.gz
+*.aux
+*.log
+*.dvi
+*.auxlock
+*.md5
+
+# Papers
+Reference/
