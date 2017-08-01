@@ -10,23 +10,24 @@ DurationType = p.Results.DurationType;
 NChannels = p.Results.NChannels;
 
 %% Creating channel
-[sampleDuration,timeDuration] = getDuration(T,duration,DurationType);
-t = (0:T:timeDuration)'; % time vector (column)
+t = getTimeVector(T,duration,DurationType); % column
 
 switch simulator
     case 'Jakes'
         ch = JakesSimulator(fd,t,nSin,NChannels);
     case 'PopBeaulieu'
         ch = PopBeaulieuSimulator(fd,t,nSin,NChannels);
+    case 'LiHuang'
+        ch = LiHuangSimulator(fd,t,nSin,NChannels);
     otherwise
         ch = 0;
 end
 
 %% Argument checker
     function inputCheck()
-
-        simulatorsList = {'Jakes','PopBeaulieu'};
-
+        
+        simulatorsList = {'Jakes','PopBeaulieu','LiHuang'};
+        
         p.addRequired('fd',...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
         p.addRequired('T',...
@@ -41,21 +42,32 @@ end
             @(x)any(validatestring(x,{'time','samples'})));
         p.addParameter('NChannels',1,...
             @(x)validateattributes(x,{'numeric'},{'scalar','integer','positive'}));
-
+        
         p.parse(fd,T,duration,varargin{:})
+        
+        
+        % futher check
+        if strcmp( p.Results.DurationType, 'samples' ) % check for integer samples
+            validateattributes(p.Results.duration,{'numeric'},{'integer'},'createChannel','duration',3);
+        end
     end
 end
 
 %% Useful functions
-function [sampleDuration,timeDuration] = getDuration(T,duration,durationType)
+function t = getTimeVector(T,duration,durationType)
 
+% limit case
+if duration==0
+    t = [];
+    return
+end
+% otherwise
 switch durationType
     case 'time'
-        timeDuration = duration;
-        sampleDuration = floor(duration/T)+1;
+        t = (0:T:duration)';
     case 'samples'
-        sampleDuration = duration;
-        timeDuration = T*duration;
+        timeDuration = T*(duration-1);
+        t = (0:T:timeDuration)';
 end
 
 end

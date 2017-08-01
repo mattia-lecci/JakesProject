@@ -19,6 +19,7 @@ for k = 1:nChannels
     ch(:,k) = computeChannel(k);
 end
 
+%% computing function
     function ch = computeChannel(k)
         cos_m = cosine(:,end)*cos( Psi(k,end) ) -...
             sine(:,end)*sin( Psi(k,end) );
