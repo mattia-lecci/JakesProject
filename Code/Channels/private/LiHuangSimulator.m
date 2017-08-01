@@ -6,7 +6,6 @@ end
 
 %% create channels
 N0 = nSin/4;
-ch = zeros( size(t,1), nChannels);
 
 [omega,phi,phi1] = getVariables(fd,N0,nChannels);
 

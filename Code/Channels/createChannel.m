@@ -19,6 +19,8 @@ switch simulator
         ch = PopBeaulieuSimulator(fd,t,nSin,NChannels);
     case 'LiHuang'
         ch = LiHuangSimulator(fd,t,nSin,NChannels);
+    case 'ZhengXiao'
+        ch = ZhengXiaoSimulator(fd,t,nSin,NChannels);
     otherwise
         ch = 0;
 end
@@ -26,7 +28,7 @@ end
 %% Argument checker
     function inputCheck()
         
-        simulatorsList = {'Jakes','PopBeaulieu','LiHuang'};
+        simulatorsList = {'Jakes','PopBeaulieu','LiHuang','ZhengXiao'};
         
         p.addRequired('fd',...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
