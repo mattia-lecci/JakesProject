@@ -25,6 +25,8 @@ switch simulator
         ch = ZhengXiao2003Simulator(fd,t,nSin,NChannels);
     case 'XiaoZhengBeaulieu'
         ch = XiaoZhengBeaulieuSimulator(fd,t,nSin,NChannels);
+    case 'Clarke'
+        ch = ClarkeSimulator(fd,t,nSin,NChannels);
     otherwise
         error('Simulator "%s" not recognized',simulator);
 end
@@ -33,7 +35,7 @@ end
     function inputCheck()
         
         simulatorsList = {'Jakes','PopBeaulieu','LiHuang',...
-            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu'};
+            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu','Clarke'};
         
         p.addRequired('fd',...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
