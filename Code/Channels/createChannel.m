@@ -16,6 +16,8 @@ t = (0:T:timeDuration)'; % time vector (column)
 switch simulator
     case 'Jakes'
         ch = JakesSimulator(fd,t,nSin,NChannels);
+    case 'PopBeaulieu'
+        ch = PopBeaulieuSimulator(fd,t,nSin,NChannels);
     otherwise
         ch = 0;
 end
@@ -23,7 +25,7 @@ end
 %% Argument checker
     function inputCheck()
 
-        simulatorsList = {'Jakes'};
+        simulatorsList = {'Jakes','PopBeaulieu'};
 
         p.addRequired('fd',...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
