@@ -8,6 +8,7 @@ simulator = p.Results.simulator;
 nSin = p.Results.nSin;
 DurationType = p.Results.DurationType;
 NChannels = p.Results.NChannels;
+interpMethod = p.Results.interpMethod;
 
 %% Creating channel
 t = getTimeVector(T,duration,DurationType); % column
@@ -27,6 +28,9 @@ switch simulator
         ch = XiaoZhengBeaulieuSimulator(fd,t,nSin,NChannels);
     case 'Clarke'
         ch = ClarkeSimulator(fd,t,nSin,NChannels);
+    case 'Komninakis'
+        addpath('../Misc');
+        ch = KomninakisSimulator(fd,t,NChannels,interpMethod);
     otherwise
         error('Simulator "%s" not recognized',simulator);
 end
@@ -35,7 +39,9 @@ end
     function inputCheck()
         
         simulatorsList = {'Jakes','PopBeaulieu','LiHuang',...
-            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu','Clarke'};
+            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu',...
+            'Clarke','Komninakis'};
+        sampMethodsList = {'filter','spline','pchip','linear'};
         
         p.addRequired('fd',...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
@@ -51,6 +57,8 @@ end
             @(x)any(validatestring(x,{'time','samples'})));
         p.addParameter('NChannels',1,...
             @(x)validateattributes(x,{'numeric'},{'scalar','integer','positive'}));
+        p.addParameter('interpMethod','spline',...
+            @(x)any(validatestring(x,sampMethodsList)));
         
         p.parse(fd,T,duration,varargin{:})
         
