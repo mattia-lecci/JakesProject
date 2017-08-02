@@ -1,4 +1,7 @@
 function ch = PopBeaulieuSimulator(fd,t,nSin,nChannels)
+% Reference A1, Eq. (24)
+
+% arg check
 if mod(nSin-2,4)~=0
     error('Number of sinusoid must be of the form nSin=4M+2 for integer M');
 end

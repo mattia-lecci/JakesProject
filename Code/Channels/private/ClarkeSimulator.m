@@ -1,4 +1,6 @@
 function ch = ClarkeSimulator(fd,t,nSin,nChannels)
+% Reference B1, Eq. (1)
+
 %% create channels
 [omega,phi] = getVariables(fd,nSin,nChannels);
 

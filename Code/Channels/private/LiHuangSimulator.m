@@ -1,4 +1,6 @@
 function ch = LiHuangSimulator(fd,t,nSin,nChannels)
+% Reference C1, Eq. (15)
+
 % arg check
 if mod(nSin,4)~=0
     error('Number of sinusoid must be of the form nSin=4*N0 for integer N0');

@@ -1,4 +1,6 @@
 function ch = JakesSimulator(fd,t,nSin,nChannels)
+% Reference A2, Eq.s (5-6-7)
+
 % arg check
 if mod(nSin-2,4)~=0
     error('Number of sinusoid must be of the form nSin=4M+2 for integer M');

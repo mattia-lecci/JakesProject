@@ -1,4 +1,24 @@
 function [ch,t] = createChannel(fd,T,duration,varargin)
+%CREATECHANNEL Create a simulated wirelss Rayleigh fading channel
+% [ch,t] = CREATECHANNEL(fd,T,duration) Creates a channel with maximum
+% doppler frequency fd, sampling period T [s] and duration in seconds using
+% the default Jakes' simulator with 10 rays
+% [ch,t] = CREATECHANNEL(fd,T,duration,simulator) With the optional
+% argument simulator you can choose the type of simulator from: 'Jakes'
+% (default), 'PopBeaulieu', 'LiHuang', 'ZhengXiao2002', 'ZhengXiao2003',
+% 'XiaoZhengBeaulieu', 'Clarke', 'Komninakis'
+% [ch,t] = CREATECHANNEL(fd,T,duration,simulator,nSin) With the optional
+% argument nSin you can control the number of sinusoids of the simulator
+% (for all simulators excluding 'Komninakis')
+% [ch,t] = CREATECHANNEL(...,Name,Value) Add Value-Name pairs as additional
+% options
+%
+% Value-Name pairs:
+% - 'DurationType': {'time' (default), 'samples'}
+% - 'NChannels': positive scalar integer
+% - 'interpMathod': valid only for 'Komninakis' simulator. {'filter', 
+% 'spline' (default), 'pchip', 'linear'}
+
 % arg check
 p = inputParser;
 inputCheck();
@@ -65,7 +85,8 @@ end
         
         % futher check
         if strcmp( p.Results.DurationType, 'samples' ) % check for integer samples
-            validateattributes(p.Results.duration,{'numeric'},{'integer'},'createChannel','duration',3);
+            validateattributes(p.Results.duration,...
+                {'numeric'},{'integer'},'createChannel','duration',3);
         end
     end
 end

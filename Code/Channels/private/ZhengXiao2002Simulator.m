@@ -1,4 +1,6 @@
 function ch = ZhengXiao2002Simulator(fd,t,nSin,nChannels)
+% Reference C2, Eq. (8)
+
 % arg check
 if mod(nSin,4)~=0
     error('Number of sinusoid must be of the form nSin=4*M for integer M');
