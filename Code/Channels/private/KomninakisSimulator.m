@@ -13,7 +13,7 @@ Tp = .1/fd; % filtering sampling period
 N = size(t,1); % number of samples required
 
 L = Tp/T; % sampling ratio
-Np = ceil( N/L ); % number of samples in Tp
+Np = ceil( N/L ); % number of samples in Tp (extra samples will be trimmed later)
 
 [b,a,Ntrans] = getDopplerFilterCoefficients();
 Ntot = Ntrans+Np; % total number of samples required
@@ -24,6 +24,10 @@ ch = filter(b,a,ch); % filter to match PSD
 ch(1:Ntrans,:) = []; % eliminate transient
 % interpolate channel using nested function
 interpolateChannel();
+
+% trim excess samples (at the beginning, there might still be transient)
+Nexcess = size(ch,1) - N;
+ch(1:Nexcess,:) = [];
 
 
 %% interpolation
