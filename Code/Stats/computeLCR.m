@@ -1,4 +1,4 @@
-function [LCR,thresh] = computeLCR(ch,t,varargin)
+function [LCR,thresh,stdev] = computeLCR(ch,t,varargin)
 
 % arg check
 p = inputParser;
@@ -9,7 +9,7 @@ ch = abs(ch); % we only care about fading envelope
 % name inputs
 thresh = p.Results.thresholds;
 
-% decide therholds
+% decide thresholds
 if isempty(thresh)
     m = min(ch(:));
     M = max(ch(:));
@@ -19,16 +19,23 @@ end
 
 %% computations
 LCR = zeros( length(thresh),1 );
+stdev = LCR;
 
 for i = 1:length(thresh)
     below = ch < thresh(i);
     above = ch >= thresh(i);
     upcross = below(1:end-1,:) & above(2:end,:);
-    LCR(i) = mean( sum(upcross) );
+    
+    % number of upcross per realization
+    numcross = sum(upcross);
+    LCR(i) = mean( numcross );
+    stdev(i) = std( numcross );
 end
 
+% normalize to time
 span = t(end) - t(1);
 LCR = LCR/span;
+stdev = stdev/span;
 
 %% Argument checker
     function inputCheck()
