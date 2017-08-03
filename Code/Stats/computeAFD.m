@@ -1,4 +1,18 @@
-function [AFD,thresh,stdev] = computeAFD(ch,t,varargin)
+function [AFD,thresh,stdev] = computeAFD(ch,T,varargin)
+%COMPUTEAFD Computes Average Fading Duration for the given channel, i.e.
+%the average time the channel stays below a certain threshold. A
+%channel is considered to be a column. Multiple independent channels are
+%supported in order to give a better estimate.
+%
+% [AFD,thresh,stdev] = COMPUTEAFD(ch,T) Computes AFD on channel ch
+% considering T as the sampling period. Threshold are decided as 25 equally
+% log-spaced values between the min and max magnitude of ch. Also returns
+% the sandard deviation of the estimate AFD (more independent channels are
+% needed for this)
+% [AFD,thresh,stdev] = COMPUTEAFD(ch,T,thresholds) You can optionally pass
+% a vector of real positive numbers containing the desired thresholds
+%
+% See also: COMPUTEALLSTATS
 
 % arg check
 p = inputParser;
@@ -34,7 +48,6 @@ for i = 1:length(thresh)
 end
 
 % normalize to time
-T = t(2) - t(1);
 AFD = AFD*T;
 stdev = stdev*T;
 
@@ -42,14 +55,13 @@ stdev = stdev*T;
     function inputCheck()
         
         p.addRequired('ch',...
-            @(x)validateattributes(x,{'numeric'},{'2d'}));
-        p.addRequired('t',...
-            @(x)validateattributes(x,{'numeric'},{'real','vector',...
-            'numel',size(ch,1)}));
+            @(x)validateattributes(x,{'numeric'},{'nonempty','2d'}));
+        p.addRequired('T',...
+            @(x)validateattributes(x,{'numeric'},{'real','positive','scalar'}));
         p.addOptional('thresholds',[],...
             @(x)validateattributes(x,{'numeric'},{'real','vector'}));
         
-        p.parse(ch,t,varargin{:});
+        p.parse(ch,T,varargin{:});
         
     end
 
