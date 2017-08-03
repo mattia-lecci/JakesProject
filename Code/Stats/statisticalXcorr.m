@@ -1,22 +1,20 @@
-function [corr,lags] = statisticalXcorr(X,Y,maxlag)
+function [corr,lags] = statisticalXcorr(X,varargin)
 
 % arg check
 p = inputParser;
 inputCheck();
-% special case
-if ( isempty(X) || isempty(Y) ) 
-    corr = [];
-    return
-end
+
+% name inputs
+Y = p.Results.Y;
+maxlag = p.Results.maxlag;
 
 %% init
-ix = ones(maxlag+1,1);
-j = 1:size(X,2);
-iy = (1:maxlag+1)';
+ix = (1:maxlag+1)'; % n+m, m=0,...,maxlag
+iy = ones(maxlag+1,1); % fixed n=1
 
 %% computation
-corr = mean( X(ix,j).*Y(iy,j) ,2);
-lags = iy-1;
+corr = mean( X(ix,:).*conj( Y(iy,:) ) ,2);
+lags = ix-1;
 
 %% Argument checker
     function inputCheck()
@@ -30,7 +28,7 @@ lags = iy-1;
             @(x)validateattributes(x,{'numeric'},{'nonnegative','integer',...
             'scalar','<',size(X,1)}));
         
-        p.parse(X,Y);
+        p.parse(X,varargin{:});
         
     end
 end
