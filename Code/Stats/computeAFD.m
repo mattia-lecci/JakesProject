@@ -1,16 +1,21 @@
-function [AFD,thresh,stdev] = computeAFD(ch,T,varargin)
+function AFD = computeAFD(ch,T,varargin)
 %COMPUTEAFD Computes Average Fading Duration for the given channel, i.e.
 %the average time the channel stays below a certain threshold. A
 %channel is considered to be a column. Multiple independent channels are
 %supported in order to give a better estimate.
 %
-% [AFD,thresh,stdev] = COMPUTEAFD(ch,T) Computes AFD on channel ch
-% considering T as the sampling period. Threshold are decided as 25 equally
-% log-spaced values between the min and max magnitude of ch. Also returns
-% the sandard deviation of the estimate AFD (more independent channels are
-% needed for this)
-% [AFD,thresh,stdev] = COMPUTEAFD(ch,T,thresholds) You can optionally pass
-% a vector of real positive numbers containing the desired thresholds
+% AFD = COMPUTEAFD(ch,T) Computes AFD on channel ch considering T as the 
+% sampling period. Threshold are decided as 25 equally log-spaced values 
+% between the min and max magnitude of ch. Returns the structure AFD, later 
+% described.
+% AFD = COMPUTEAFD(ch,T,thresholds) You can optionally pass a vector of 
+% real positive numbers containing the desired thresholds.
+%
+% OUTPUT: Structure AFD with fields:
+% - AFD.values: the computed Average Fade Duration
+% - AFD.thresh: thresholds on which values are computed
+% - AFD.stdev: standard deviation of the estimated values (more independent
+%       channels are needed for this)
 %
 % See also: COMPUTEALLSTATS
 
@@ -48,8 +53,9 @@ for i = 1:length(thresh)
 end
 
 % normalize to time
-AFD = AFD*T;
-stdev = stdev*T;
+AFD.values = AFD*T;
+AFD.stdev = stdev*T;
+AFD.thresh = thresh;
 
 %% Argument checker
     function inputCheck()
@@ -89,7 +95,7 @@ c = 0;
 % cycle through the vector
 while vi<=maxind
     if v(vi)==true %fade starts
-        c(ci) = 1;
+        c(ci) = 1; %#ok<AGROW>
         vi = vi+1;
         while ( vi<=maxind && v(vi)==true ) % lazy evaluation
             c(ci) = c(ci)+1; % count

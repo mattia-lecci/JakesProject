@@ -10,14 +10,8 @@ function stats = computeAllStats(ch,t,varargin)
 % OUTPUT: stats is a structure containing the following field:
 % - stats.pdf: output of computePdf. Look at the function for more details
 % - stats.xcorr: output of computeXcorr
-% - stats.LCR: structure containing the output of computeLCR:
-%   * stats.LCR.values: contains the output LCR
-%   * stats.LCR.thresh: contains the output threshxcorr
-%   * stats.LCR.stdev: contains the output stdev
-% - stats.AFD: structure containing the output of computeAFD:
-%   * stats.AFD.values: contains the output AFD
-%   * stats.AFD.thresh: contains the output thresh
-%   * stats.AFD.stdev: contains the output stdev
+% - stats.LCR: output of computeLCR
+% - stats.AFD: output of computeAFD
 %
 % Name-Value pairs:
 % - 'pdfInd': second required input ('ind') of computePdf. Default: last
@@ -47,10 +41,8 @@ duration = t(end)-t(1);
 % calls to functions
 stats.pdf = computePdf( ch,pdfInd,binMethod ); % compute pdf on last sample
 stats.xcorr = computeXcorr( ch,maxlag ); % compute all type of auto and cross correlation
-[stats.LCR.values,stats.LCR.thresh,stats.LCR.stdev] =...
-    computeLCR( ch,duration,thresh ); % compute LCR
-[stats.AFD.values,stats.AFD.thresh,stats.AFD.stdev] =...
-    computeAFD( ch,T,thresh ); % compute AFD
+stats.LCR = computeLCR( ch,duration,thresh ); % compute LCR
+stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
 
 
 %% Argument checker
