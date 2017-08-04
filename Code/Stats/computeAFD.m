@@ -1,5 +1,5 @@
 function AFD = computeAFD(ch,T,varargin)
-%COMPUTEAFD Computes Average Fading Duration for the given channel, i.e.
+%COMPUTEAFD Computes Average Fade Duration for the given channel, i.e.
 %the average time the channel stays below a certain threshold. A
 %channel is considered to be a column. Multiple independent channels are
 %supported in order to give a better estimate.
