@@ -1,12 +1,35 @@
-function [magFitPlot,magHistPlot,phaseHistPlot] = plotPdf(PDF,legend)
+function plots = plotPdf(PDF,legend)
+%PLOTPDF Plots probability distribution functions given as output from
+%computePdf
+%
+% plots = PLOTPDF(PDF,legend) Plots all of the precalculated PDFs from the
+% function computePdf, plotting first a thick black line representing the
+% ideal case, and then all of the others containined in the array of struct
+% PDF. The input legend should contain a cell array of strings containing
+% the legend with the same order (and number of elements) of PDF.
+%
+% Plots the fitted Rayleigh distributions of the magnitude and the line
+% version of the histogram of both the magnitude and phase.
+%
+% OUTPUT: plots is a structure with fields:
+% - plots.magFitPlot
+% - plots.magHistPlot
+% - plots.phaseHistPlot
+% Each of them contain an array with length(PDF)+1 elements, in which the
+% first one contains a FunctionLine object handle (Ideal case), and the
+% others in order contain Line (FunctionLine for magFitPlot) object handles
+% in order for each of the elements in PDF.
+%
+% See also: COMPUTEPDF
 
 % arg check
 p = inputParser;
 inputCheck();
 
 %% Plots
-[magFitPlot,magHistPlot] = plotMagnitude([PDF.magnitude],legend);
-phaseHistPlot = plotPhase([PDF.phase],legend);
+[plots.magFitPlot,plots.magHistPlot] =...
+    plotMagnitude([PDF.magnitude],legend);
+plots.phaseHistPlot = plotPhase([PDF.phase],legend);
 
 %% Argument checker
     function inputCheck()
@@ -127,7 +150,7 @@ function plots = plotHistogram(binval,edges)
 centers = getBinCenters(edges);
 
 for i = 1:length(binval)
-    plots(i) = plot(centers{i},binval{i});
+    plots(i) = plot(centers{i},binval{i}); %#ok<AGROW>
 end
 
 end

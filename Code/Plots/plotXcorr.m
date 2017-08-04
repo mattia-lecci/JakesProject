@@ -1,4 +1,32 @@
 function plots = plotXcorr(XCORR,legend,fd,T)
+%PLOTXCORR Plots cross correlation functions given as output from
+%computeXcorr
+%
+% plots = PLOTXCORR(XCORR,legend,fd,T) Plots all of the precalculated 
+% cross correlations from the  function computeXcorr, plotting first a
+% thick black  line representing the ideal case, and then all of the others
+% containined in the array of struct XCORR. The input legend should contain
+% a cell array of strings containing the legend with the same order (and
+% number of elements) of XCORR. The inputs fd and T are used as
+% normalizations for the time lags.
+%
+% Plots all the correlations computed in computeXcorr, dividing XCORR.X in
+% real and imaginary part.
+%
+% OUTPUT: plots is a structure with fields:
+% - plots.XcXc
+% - plots.XsXs
+% - plots.XcXs
+% - plots.XsXc
+% - plots.ReX
+% - plots.ImX
+% - plots.X2
+% Each of them contain an array with length(XCORR)+1 elements, in which the
+% first one contains a FunctionLine object handle (Ideal case), and the
+% others in order contain Line object handles in order for each of the
+% elements in XCORR.
+%
+% See also: COMPUTEXCORR
 
 % arg check
 p = inputParser;
@@ -7,7 +35,7 @@ inputCheck();
 % init
 t = XCORR.lags*T*fd;
 besselLim = [-.6,1.2];
-zeroLim = [-.5,.5];
+zeroLim = [-1,1];
 bessel2Lim = [.8,2.2];
 
 %% Plots
@@ -78,7 +106,7 @@ hold on; grid on;
 
 % given data
 for i = 1:length(others)
-    plots(i+1) = plot(t,others{i});
+    plots(i+1) = plot(t,others{i}); %#ok<AGROW>
 end
 
 % aesthetic
