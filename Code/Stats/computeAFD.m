@@ -37,8 +37,8 @@ if isempty(thresh)
 end
 
 %% computations
-AFD = zeros( length(thresh),1 );
-stdev = AFD;
+AFD.values = zeros( length(thresh),1 );
+AFD.stdev = AFD.values;
 
 for i = 1:length(thresh)
     % cell array containing column vectors with list of consecutive ones
@@ -47,14 +47,14 @@ for i = 1:length(thresh)
     % perform mean for each vector => mean FD for each realization
     realizationMean = cellfun(@mean,consec);
     % mean of the means of the realizations (as number of samples)
-    AFD(i) = mean(realizationMean);
+    AFD.values(i) = mean(realizationMean);
     % stdev of the means of the realizations
-    stdev(i) = std(realizationMean);
+    AFD.stdev(i) = std(realizationMean);
 end
 
 % normalize to time
-AFD.values = AFD*T;
-AFD.stdev = stdev*T;
+AFD.values = AFD.values*T;
+AFD.stdev = AFD.stdev*T;
 AFD.thresh = thresh;
 
 %% Argument checker

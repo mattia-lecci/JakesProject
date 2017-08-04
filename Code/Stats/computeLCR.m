@@ -37,8 +37,8 @@ if isempty(thresh)
 end
 
 %% computations
-LCR = zeros( length(thresh),1 );
-stdev = LCR;
+LCR.values = zeros( length(thresh),1 );
+LCR.stdev = LCR.values;
 
 for i = 1:length(thresh)
     below = ch < thresh(i);
@@ -47,13 +47,13 @@ for i = 1:length(thresh)
     
     % number of upcross per realization
     numcross = sum(upcross);
-    LCR(i) = mean( numcross );
-    stdev(i) = std( numcross );
+    LCR.values(i) = mean( numcross );
+    LCR.stdev(i) = std( numcross );
 end
 
 % normalize to time
-LCR.values = LCR/duration;
-LCR.stdev = stdev/duration;
+LCR.values = LCR.values/duration;
+LCR.stdev = LCR.stdev/duration;
 LCR.thresh = thresh;
 
 %% Argument checker
