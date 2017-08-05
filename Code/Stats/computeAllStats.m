@@ -2,10 +2,10 @@ function stats = computeAllStats(ch,t,varargin)
 %COMPUTEALLSTATS Computes all statistics of the given channel in one shot
 %
 % stats = computeAllStats(ch,t) Computes all of the statistics of channel
-% ch based on time vector t and puts them in the structure stats, later
-% described
+%   ch based on time vector t and puts them in the structure stats, later
+%   described
 % stats = computeAllStats(...,Name,Value) Name-Value pairs can be added to
-% better control the details of the statistics
+%   better control the details of the statistics
 %
 % OUTPUT: stats is a structure containing the following field:
 % - stats.pdf: output of computePdf. Look at the function for more details

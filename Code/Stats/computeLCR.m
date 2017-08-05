@@ -4,12 +4,12 @@ function LCR = computeLCR(ch,duration,varargin)
 %supported in order to give a better estimate.
 %
 % LCR = COMPUTELCR(ch,duration) Computes the LCR of the
-% channel ch of the given duration. Threshold are decided as 25 equally
-% log-spaced values between the min and max magnitude of ch. Returns the
-% structure LCR, later described.
+%   channel ch of the given duration. Threshold are decided as 25 equally
+%   log-spaced values between the min and max magnitude of ch. Returns the
+%   structure LCR, later described.
 % LCR = COMPUTELCR(ch,duration,thresholds) You can
-% optionally pass a vector of real positive numbers containing the desired
-% thresholds.
+%   optionally pass a vector of real positive numbers containing the desired
+%   thresholds.
 %
 % OUTPUT: Structure LCR with fields:
 % - LCR.values: the computed Level Crossing Rates

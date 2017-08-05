@@ -3,21 +3,21 @@ function pdf = computePdf(ch,varargin)
 %columns of ch (which should be independent channels)
 %
 % pdf = COMPUTEPDF(ch) Computes pdf for channel ch on the last available
-% sample. Returns a structure, later described.
+%   sample. Returns a structure, later described.
 % pdf = COMPUTEPDF(ch,ind) Computes pdf for channel ch on samples indexes
-% given by ind (either scalar or vector). Returns a structure of the same
-% length of ind.
+%   given by ind (either scalar or vector). Returns a structure of the same
+%   length of ind.
 % pdf = COMPUTEPDF(ch,ind,binMethod) Allows you to choose the binning
-% method of histcounts from: 'auto' (default), 'scott', 'fd', 'integers',
-% 'sturges', 'sqrt'
+%   method of histcounts from: 'auto' (default), 'scott', 'fd', 'integers',
+%   'sturges', 'sqrt'
 %
 % NOTE: No uniform distribution fit is available in matlab, that's why
 % phase.fit is not present
 %
 % Structure fields:
 % - pdf.magnitude.fit: containing a RayleighDistribution object fitted,
-% from which you can extract mean, variance, std, parameter (b) confidence
-% interval, plot pdf, cdf,...
+%   from which you can extract mean, variance, std, parameter (b) confidence
+%   interval, plot pdf, cdf,...
 % - pdf.magnitude.normBinCount: vector of histogram bin count normalized as pdf
 % - pdf.magnitude.edges: vector of histogram edges
 % - pdf.phase.normBinCount: vector of histogram bin count normalized as pdf

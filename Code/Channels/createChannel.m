@@ -1,5 +1,6 @@
 function [ch,t] = createChannel(fd,T,duration,varargin)
 %CREATECHANNEL Create a simulated wirelss Rayleigh fading channel
+%
 % [ch,t] = CREATECHANNEL(fd,T,duration) Creates a channel with maximum
 % doppler frequency fd, sampling period T [s] and duration in seconds using
 % the default Jakes' simulator with 10 rays
@@ -17,7 +18,7 @@ function [ch,t] = createChannel(fd,T,duration,varargin)
 % - 'DurationType': {'time' (default), 'samples'}
 % - 'NChannels': positive scalar integer
 % - 'interpMathod': valid only for 'Komninakis' simulator. {'filter', 
-% 'spline' (default), 'pchip', 'linear'}
+%       'spline' (default), 'pchip', 'linear'}
 
 % arg check
 p = inputParser;

@@ -5,11 +5,11 @@ function AFD = computeAFD(ch,T,varargin)
 %supported in order to give a better estimate.
 %
 % AFD = COMPUTEAFD(ch,T) Computes AFD on channel ch considering T as the 
-% sampling period. Threshold are decided as 25 equally log-spaced values 
-% between the min and max magnitude of ch. Returns the structure AFD, later 
-% described.
+%   sampling period. Threshold are decided as 25 equally log-spaced values 
+%   between the min and max magnitude of ch. Returns the structure AFD, later 
+%   described.
 % AFD = COMPUTEAFD(ch,T,thresholds) You can optionally pass a vector of 
-% real positive numbers containing the desired thresholds.
+%   real positive numbers containing the desired thresholds.
 %
 % OUTPUT: Structure AFD with fields:
 % - AFD.values: the computed Average Fade Duration

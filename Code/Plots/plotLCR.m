@@ -2,19 +2,19 @@ function plots = plotLCR(LCR,legend,fd,varargin)
 %PLOTLCR Plots the Level Crossing Rate given as output from computeLCR
 %
 % plots = PLOTLCR(LCR,legend,fd) Plots all of the precalculated LCR from the
-% function computeLCR, plotting first a thick black line representing the
-% ideal case, and then all of the others containined in the array of struct
-% LCR. The input legend should contain a cell array of strings containing
-% the legend with the same order (and number of elements) of LCR. Finally,
-% fd is the maximum doppler frequency used to create the channels (it must
-% be the same for all of them).
+%   function computeLCR, plotting first a thick black line representing the
+%   ideal case, and then all of the others containined in the array of struct
+%   LCR. The input legend should contain a cell array of strings containing
+%   the legend with the same order (and number of elements) of LCR. Finally,
+%   fd is the maximum doppler frequency used to create the channels (it must
+%   be the same for all of them).
 % plots = PLOTLCR(LCR,legend,fd,RMS) If the channel had a different RMS
-% from 1, you can specify it as the fourth input.
+%   from 1, you can specify it as the fourth input.
 %
 % OUTPUT: plots is a vector with length(LCR)+1 number of elements. The
-% first element is a FunctionLine object handle (Ideal case), and the
-% others in order contain Line object handles in order for each of the
-% elements in LCR.
+%   first element is a FunctionLine object handle (Ideal case), and the
+%   others in order contain Line object handles in order for each of the
+%   elements in LCR.
 %
 % See also: COMPUTELCR
 

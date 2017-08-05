@@ -3,12 +3,12 @@ function plots = plotXcorr(XCORR,legend,fd,T)
 %computeXcorr
 %
 % plots = PLOTXCORR(XCORR,legend,fd,T) Plots all of the precalculated 
-% cross correlations from the  function computeXcorr, plotting first a
-% thick black  line representing the ideal case, and then all of the others
-% containined in the array of struct XCORR. The input legend should contain
-% a cell array of strings containing the legend with the same order (and
-% number of elements) of XCORR. The inputs fd and T are used as
-% normalizations for the time lags.
+%   cross correlations from the  function computeXcorr, plotting first a
+%   thick black  line representing the ideal case, and then all of the others
+%   containined in the array of struct XCORR. The input legend should contain
+%   a cell array of strings containing the legend with the same order (and
+%   number of elements) of XCORR. The inputs fd and T are used as
+%   normalizations for the time lags.
 %
 % Plots all the correlations computed in computeXcorr, dividing XCORR.X in
 % real and imaginary part.

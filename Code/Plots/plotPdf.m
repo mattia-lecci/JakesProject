@@ -3,10 +3,10 @@ function plots = plotPdf(PDF,legend)
 %computePdf
 %
 % plots = PLOTPDF(PDF,legend) Plots all of the precalculated PDFs from the
-% function computePdf, plotting first a thick black line representing the
-% ideal case, and then all of the others containined in the array of struct
-% PDF. The input legend should contain a cell array of strings containing
-% the legend with the same order (and number of elements) of PDF.
+%   function computePdf, plotting first a thick black line representing the
+%   ideal case, and then all of the others containined in the array of struct
+%   PDF. The input legend should contain a cell array of strings containing
+%   the legend with the same order (and number of elements) of PDF.
 %
 % Plots the fitted Rayleigh distributions of the magnitude and the line
 % version of the histogram of both the magnitude and phase.
