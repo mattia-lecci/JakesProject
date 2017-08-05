@@ -15,7 +15,8 @@ function [ch,t] = createChannel(fd,T,duration,varargin)
 % options
 %
 % Value-Name pairs:
-% - 'DurationType': {'time' (default), 'samples'}
+% - 'DurationType': {'time' (default), 'samples','Tcoh'}. Tcoh is the
+%   coherence time defined as Tcoh=1/fd
 % - 'NChannels': positive scalar integer
 % - 'interpMethod': valid only for 'Komninakis' simulator. {'filter', 
 %       'spline' (default), 'pchip', 'linear'}
@@ -36,7 +37,7 @@ NChannels = p.Results.NChannels;
 interpMethod = p.Results.interpMethod;
 
 %% Creating channel
-t = getTimeVector(T,duration,DurationType); % column
+t = getTimeVector(T,fd,duration,DurationType); % column
 
 switch simulator
     case 'Jakes'
@@ -79,7 +80,7 @@ end
         p.addOptional('nSin',10,...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive','integer'}));
         p.addParameter('DurationType','time',...
-            @(x)any(validatestring(x,{'time','samples'})));
+            @(x)any(validatestring(x,{'time','samples','Tcoh'})));
         p.addParameter('NChannels',1,...
             @(x)validateattributes(x,{'numeric'},{'scalar','integer','positive'}));
         p.addParameter('interpMethod','spline',...
@@ -97,7 +98,7 @@ end
 end
 
 %% Useful functions
-function t = getTimeVector(T,duration,durationType)
+function t = getTimeVector(T,fd,duration,durationType)
 
 % limit case
 if duration==0
@@ -111,6 +112,9 @@ switch durationType
     case 'samples'
         timeDuration = T*(duration-1);
         t = (0:T:timeDuration)';
+    case 'Tcoh'
+        Tcoh = 1/fd;
+        t = (0:T:duration*Tcoh)';
 end
 
 end
