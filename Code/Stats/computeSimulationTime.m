@@ -1,4 +1,31 @@
 function [samples,time] = computeSimulationTime(simulators,varargin)
+%COMPUTESIMULATIONTIME Computes how much simulations take to produce their
+%output as a function of the number of samples to produce
+%
+% [samples,time] = COMPUTESIMULATIONTIME(simulators) Computes the
+%   simulation time for the given list of simulators (either a cell array
+%   with the names of the simulators to be tested or a single char array, 
+%   as in createChannel). Returns a vector with the number of samples
+%   tested and the time it took for every simulator (simulators on
+%   different columns).
+% [samples,time] = COMPUTESIMULATIONTIME(simulators,precision) The
+%   simulation is stopped whenever the 95% confidence interval falls below
+%   the given precision, with at leat 4 runs, and then averaged. Here you
+%   can specify a precision of you choice. Default: 0.05.
+% [samples,time] = COMPUTESIMULATIONTIME(simulators,precision,NsamplesList)
+%   You can specifify the list of required number of samples to test.
+%   Default: round( logspace(3,7,20) )'
+% [samples,time] = computeSimulationTime(...,Name,Value) Additional
+%   Name-Value pairs can be spacified.
+%
+% Name-Value pairs:
+% - fd: doppler spread to be used in createChannel. Default: 10 [Hz]
+% - T: sampling period. Default: 0.01 [s]
+% - nSin: number of sinusoids to be used. Default: 10
+% - interpMethod: interpolation method to be used for Komninakis simulator.
+%   Default: 'spline'. See createChannel for more infomation.
+%
+% See also: CREATECHANNEL
 
 % arg check
 p = inputParser;
@@ -18,6 +45,7 @@ if ischar(simulators)
 end
 
 time = zeros( length(samples),length(simulators) );
+addpath('../Channels')
 
 %% computations
 for j = 1:length(simulators)
@@ -32,7 +60,7 @@ end
     function inputCheck()
         
         p.addRequired('simulators', @(x)checkValidSimList(x));
-        p.addOptional('precision',.5,...
+        p.addOptional('precision',.05,...
             @(x)validateattributes(x,{'numeric'},{'positive','scalar'}));
         p.addOptional('NsamplesList', round( logspace(3,7,20) )',...
             @(x)validateattributes(x,{'numeric'},{'positive','integer',...

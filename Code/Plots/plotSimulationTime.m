@@ -1,4 +1,16 @@
 function plots = plotSimulationTime(samples,time,Legend)
+%PLOTSIMULATIONTIME Plots the simulations times as given by the function
+%computeSimulationTime
+%
+% plots = PLOTSIMULATIONTIME(samples,time,Legend) Plots the simulation
+%   times as given by the function computeSimulationTime. To try to keep
+%   the same colours as the other plots, the first one (which is usually
+%   the Ideal plot) is discarded. Legend should contain the names to put in
+%   the legend in order (left to right) with the columns of the input time.
+%   The output plots is a vector of Line handles which contain, in order,
+%   references to the plotted lines.
+%
+% See also: COMPUTESIMULATIONTIME
 
 % arg check
 p = inputParser;
