@@ -1,22 +1,27 @@
-function pdf = computePdf(ch,ind,varargin)
+function pdf = computePdf(ch,varargin)
 %COMPUTEPDF Computes pdfs of the given channel using as realizations the
 %columns of ch (which should be independent channels)
+%
+% pdf = COMPUTEPDF(ch) Computes pdf for channel ch on the last available
+%   sample. Returns a structure, later described.
 % pdf = COMPUTEPDF(ch,ind) Computes pdf for channel ch on samples indexes
-% given by ind (either scalar or vector). Returns a structure of the same
-% length of ind with fields:
-% - magnitude.fit: containing a RayleighDistribution object fitted, from
-% which you can extract mean, variance, std, parameter (b) confidence
-% interval, plot pdf, cdf,...
-% - magnitude.normBinCount: vector of histogram bin count normalized as pdf
-% - magnitude.edges: vector of histogram edges
-% - phse.normBinCount: vector of histogram bin count normalized as pdf
-% - phse.edges: vector of histogram edges
+%   given by ind (either scalar or vector). Returns a structure of the same
+%   length of ind.
 % pdf = COMPUTEPDF(ch,ind,binMethod) Allows you to choose the binning
-% method of histcounts from: 'auto', 'scott', 'fd', 'integers', 'sturges',
-% 'sqrt' (default)
+%   method of histcounts from: 'auto' (default), 'scott', 'fd', 'integers',
+%   'sturges', 'sqrt'
 %
 % NOTE: No uniform distribution fit is available in matlab, that's why
 % phase.fit is not present
+%
+% Structure fields:
+% - pdf.magnitude.fit: containing a RayleighDistribution object fitted,
+%   from which you can extract mean, variance, std, parameter (b) confidence
+%   interval, plot pdf, cdf,...
+% - pdf.magnitude.normBinCount: vector of histogram bin count normalized as pdf
+% - pdf.magnitude.edges: vector of histogram edges
+% - pdf.phase.normBinCount: vector of histogram bin count normalized as pdf
+% - pdf.phase.edges: vector of histogram edges
 %
 % normBinCount and edges can be visualized with the following command:
 % histogram('BinEdges',edges,'BinCounts',normBinCount)
@@ -50,12 +55,12 @@ end
         
         p.addRequired('ch',...
             @(x)validateattributes(x,{'numeric'},{'2d','nonempty'}));
-        p.addRequired('ind',...
+        p.addOptional('ind',size(ch,1),...
             @(x)validateattributes(x,{'numeric'},{'vector','positive','integer'}));
-        p.addOptional('binMethod','sqrt',...
+        p.addOptional('binMethod','auto',...
             @(x)any(validatestring(x,validBinMethods)));
         
-        p.parse(ch,ind,varargin{:});
+        p.parse(ch,varargin{:});
         
     end
 end

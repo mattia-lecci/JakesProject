@@ -1,16 +1,21 @@
-function [LCR,thresh,stdev] = computeLCR(ch,duration,varargin)
+function LCR = computeLCR(ch,duration,varargin)
 %COMPUTELCR Computes the Level Crossing Rate of the given channel. A
 %channel is considered to be a column. Multiple independent channels are
 %supported in order to give a better estimate.
 %
-% [LCR,thresh,stdev] = COMPUTELCR(ch,duration) Computes the LCR of the
-% channel ch of the given duration. Threshold are decided as 25 equally
-% log-spaced values between the min and max magnitude of ch. Also returns
-% the sandard deviation of the estimate LCR (more independent channels are
-% needed for this)
-% [LCR,thresh,stdev] = COMPUTELCR(ch,duration,thresholds) You can
-% optionally pass a vector of real positive numbers containing the desired
-% thresholds
+% LCR = COMPUTELCR(ch,duration) Computes the LCR of the
+%   channel ch of the given duration. Threshold are decided as 25 equally
+%   log-spaced values between the min and max magnitude of ch. Returns the
+%   structure LCR, later described.
+% LCR = COMPUTELCR(ch,duration,thresholds) You can
+%   optionally pass a vector of real positive numbers containing the desired
+%   thresholds.
+%
+% OUTPUT: Structure LCR with fields:
+% - LCR.values: the computed Level Crossing Rates
+% - LCR.thresh: thresholds on which values are computed
+% - LCR.stdev: standard deviation of the estimated values (more independent
+%       channels are needed for this)
 %
 % See also: COMPUTEALLSTATS
 
@@ -32,8 +37,8 @@ if isempty(thresh)
 end
 
 %% computations
-LCR = zeros( length(thresh),1 );
-stdev = LCR;
+LCR.values = zeros( length(thresh),1 );
+LCR.stdev = LCR.values;
 
 for i = 1:length(thresh)
     below = ch < thresh(i);
@@ -42,13 +47,14 @@ for i = 1:length(thresh)
     
     % number of upcross per realization
     numcross = sum(upcross);
-    LCR(i) = mean( numcross );
-    stdev(i) = std( numcross );
+    LCR.values(i) = mean( numcross );
+    LCR.stdev(i) = std( numcross );
 end
 
 % normalize to time
-LCR = LCR/duration;
-stdev = stdev/duration;
+LCR.values = LCR.values/duration;
+LCR.stdev = LCR.stdev/duration;
+LCR.thresh = thresh;
 
 %% Argument checker
     function inputCheck()

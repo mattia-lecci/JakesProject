@@ -3,9 +3,9 @@ function xcorr = computeXcorr(ch,varargin)
 %channel using statisticalXcorr.m.
 %
 % xcorr = COMPUTEXCORR(ch) Considers the columns of ch as realizations of a
-% channel and estimates its statistical correlations.
+%   channel and estimates its statistical correlations.
 % xcorr = COMPUTEXCORR(ch,maxlag) You can decide to compute the
-% correlations up to a lower maximum lag.
+%   correlations up to a lower maximum lag.
 %
 % OUTPUT: consider the channel to be a random variable X = Xc+j*Xs
 % Using the notation R_YZ(n,m)=E[Y(n+m)Z*(n)]=E[Y(n)Z*(n-m)] to indicate
@@ -15,7 +15,7 @@ function xcorr = computeXcorr(ch,varargin)
 % following fields:
 %
 % - xcorr.lags containing the lags at which all the following correlations
-%           are computed
+%   are computed
 % - xcorr.XcXc containing R_XcXc
 % - xcorr.XsXs containing R_XsXs
 % - xcorr.XcXs containing R_XcXs

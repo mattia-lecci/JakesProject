@@ -1,23 +1,22 @@
 function ch = JakesSimulator(fd,t,nSin,nChannels)
 % Reference A2, Eq.s (5-6-7)
+%
+% See also: CREATECHANNEL
 
 % arg check
-if mod(nSin-2,4)~=0
-    error('Number of sinusoid must be of the form nSin=4M+2 for integer M');
-end
 if nChannels>1
     warning(['Jakes Simulator does not support multiple independent channels. '...
         'The channels will be replicated using repmat']);
 end
 
 %% create channels
-M = (nSin-2)/4;
-[a,b,omega]= getVariables(M,fd);
+Ntot = 4*nSin+2;
+[a,b,omega]= getVariables(nSin,fd);
 
 % computations
 cosine = cos(omega.*t); % compute only once
-uc = 2/sqrt(nSin)*sum( a.*cosine ,2);
-us = 2/sqrt(nSin)*sum( b.*cosine ,2);
+uc = 2/sqrt(Ntot)*sum( a.*cosine ,2);
+us = 2/sqrt(Ntot)*sum( b.*cosine ,2);
 
 % channel
 ch = repmat( uc+1j*us ,1,nChannels);

@@ -1,11 +1,12 @@
 function X = crandn(n,varargin)
 %CRANDN Creates complex random variables
+%
 % X = CRANDN(n) creates nx1 vector with 0 mean and unit variance
 % X = CRANDN(n,m) creates nxm vector with 0 mean and unit variance
 % X = CRANDN(n,m,meanval) creates nxm vector with "meanval" mean
-% and unit variance
+%   and unit variance
 % X = CRANDN(n,m,meanval,variance) creates nxm vector with "meanval" mean
-% and "variance" variance
+%   and "variance" variance
 
 % arg check
 p = inputParser;

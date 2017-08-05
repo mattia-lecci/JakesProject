@@ -4,18 +4,20 @@ function [corr,lags] = statisticalXcorr(X,varargin)
 %Inputs are supposed to be WSS and n=1 (Matlab starts from 1). The second
 %formula is used.
 %Every column is considered to be a realization of a stochastic process and
-%the expectation is estimated as a mean of the realizations
+%the expectation is estimated as a mean of the realizations.
+%Lags are considered as number of samples.
 %
 % [corr,lags] = STATISTICALXCORR(X) Computes the statistical autocorrelation
-% of X. Only positive lags are computed and the maximum lag is the highest
-% available, i.e. the length of each realization minus 1.
+%   of X. Only positive lags are computed and the maximum lag is the highest
+%   available, i.e. the length of each realization minus 1. lag refers to the
+%   number of samples, not time.
 % [corr,lags] = STATISTICALXCORR(X,Y) Computes the statistical cross
-% correlation between X and Y. The dimension of Y must be the same as X
-% (meaning number of rows, columns and elements). Only positive lags are
-% computed
+%   correlation between X and Y. The dimension of Y must be the same as X
+%   (meaning number of rows, columns and elements). Only positive lags are
+%   computed
 % [corr,lags] = STATISTICALXCORR(X,Y,maxlag) You can decide to compute only
-% the lags needed. maxlag must be smaller than the first dimension of X or
-% Y.
+%   the lags needed. maxlag must be smaller than the first dimension of X or
+%   Y.
 %
 % See also: COMPUTEXCORR
 
