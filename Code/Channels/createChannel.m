@@ -17,7 +17,7 @@ function [ch,t] = createChannel(fd,T,duration,varargin)
 % Value-Name pairs:
 % - 'DurationType': {'time' (default), 'samples'}
 % - 'NChannels': positive scalar integer
-% - 'interpMathod': valid only for 'Komninakis' simulator. {'filter', 
+% - 'interpMethod': valid only for 'Komninakis' simulator. {'filter', 
 %       'spline' (default), 'pchip', 'linear'}
 %
 % See also: POPBEAULIEUSIMULATOR, JAKESSIMULATOR, ZHENGXIAO2003SIMULATOR,
