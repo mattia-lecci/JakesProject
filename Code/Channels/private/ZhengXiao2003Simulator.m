@@ -1,15 +1,10 @@
 function ch = ZhengXiao2003Simulator(fd,t,nSin,nChannels)
 % Reference A2, Eq. (21)
-
-% arg check
-if mod(nSin,4)~=0
-    error('Number of sinusoid must be of the form nSin=4*M for integer M');
-end
+%
+% See also: CREATECHANNEL
 
 %% create channels
-M = nSin/4;
-
-[omega,psi,phi] = getVariables(fd,M,nChannels);
+[omega,psi,phi] = getVariables(fd,nSin,nChannels);
 
 % init
 ch = zeros( size(t,1),nChannels );
@@ -22,7 +17,7 @@ end
 %% computing function
     function ch = computeChannel(k)
         
-        ch = sqrt(2/M)*(...
+        ch = sqrt(2/nSin)*(...
             sum( cos( psi(k,:) ).*cos( omega(k,:).*t + phi(k) ) ,2) +...
          1j*sum( sin( psi(k,:) ).*cos( omega(k,:).*t + phi(k) ) ,2)...
                                 );

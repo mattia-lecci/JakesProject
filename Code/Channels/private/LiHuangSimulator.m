@@ -1,15 +1,10 @@
 function ch = LiHuangSimulator(fd,t,nSin,nChannels)
 % Reference C1, Eq. (15)
-
-% arg check
-if mod(nSin,4)~=0
-    error('Number of sinusoid must be of the form nSin=4*N0 for integer N0');
-end
+%
+% See also: CREATECHANNEL
 
 %% create channels
-N0 = nSin/4;
-
-[omega,phi,phi1] = getVariables(fd,N0,nChannels);
+[omega,phi,phi1] = getVariables(fd,nSin,nChannels);
 
 % init
 ch = zeros( size(t,1),nChannels );
@@ -22,7 +17,7 @@ end
 %% computing function
     function ch = computeChannel(k)
         
-        ch = sqrt(1/N0)*sum(...
+        ch = sqrt(1/nSin)*sum(...
             cos( omega(k,:).*t + phi(k,:) ) +...
          1j*sin( omega(k,:).*t + phi1(k,:) )...
                                 ,2);

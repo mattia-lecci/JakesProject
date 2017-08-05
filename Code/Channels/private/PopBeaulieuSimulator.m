@@ -1,16 +1,13 @@
 function ch = PopBeaulieuSimulator(fd,t,nSin,nChannels)
 % Reference A1, Eq. (24)
-
-% arg check
-if mod(nSin-2,4)~=0
-    error('Number of sinusoid must be of the form nSin=4M+2 for integer M');
-end
+%
+% See also: CREATECHANNEL
 
 %% create channels
-M = (nSin-2)/4;
-n = 1:M;
+n = 1:nSin;
+Ntot = 4*nSin+2;
 
-[B,Psi,omega]= getVariables(M,fd,nChannels);
+[B,Psi,omega]= getVariables(nSin,fd,nChannels);
 
 % init
 ch = zeros( size(t,1),nChannels );
@@ -29,9 +26,9 @@ end
         cos_n = cosine(:,n).*cos( Psi(k,n) ) -...
             sine(:,n).*sin( Psi(k,n) );
 
-        X2c = 2/sqrt(nSin)*( cos(B(end))*cos_m +...
+        X2c = 2/sqrt(Ntot)*( cos(B(end))*cos_m +...
                             sqrt(2)*sum( cos(B(n)).*cos_n ,2) );
-        X2s = 2/sqrt(nSin)*( sin(B(end))*cos_m +...
+        X2s = 2/sqrt(Ntot)*( sin(B(end))*cos_m +...
                             sqrt(2)*sum( sin(B(n)).*cos_n ,2) );
 
         ch = X2c + 1j*X2s;

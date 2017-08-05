@@ -19,6 +19,10 @@ function [ch,t] = createChannel(fd,T,duration,varargin)
 % - 'NChannels': positive scalar integer
 % - 'interpMathod': valid only for 'Komninakis' simulator. {'filter', 
 %       'spline' (default), 'pchip', 'linear'}
+%
+% See also: POPBEAULIEUSIMULATOR, JAKESSIMULATOR, ZHENGXIAO2003SIMULATOR,
+%   KOMNINAKISSIMULATOR, CLARKESIMULATOR, XIAOZHENGBEAULIEUSIMULATOR,
+%   LIHUANGSIMULATOR, ZHENGXIAO2002SIMULATOR
 
 % arg check
 p = inputParser;

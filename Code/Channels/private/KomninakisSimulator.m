@@ -1,5 +1,7 @@
 function ch = KomninakisSimulator(fd,t,nCh,interpMethod)
 % Reference A3
+%
+% See also: CREATECHANNEL
 
 % check special cases
 if size(t,1)<2
