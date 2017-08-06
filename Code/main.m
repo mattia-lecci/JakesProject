@@ -6,7 +6,7 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 
 %% Parameters
 % main parameters
-loadStats =     false;
+loadStats =     true;
 loadSimTime =   true;
 saveStats =     false;
 saveSimTime =   false;

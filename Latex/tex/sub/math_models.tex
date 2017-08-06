@@ -1,3 +1,35 @@
 \subsection{Mathematical models used} % no limits given
-\label{sec:math_models}
+\label{subsec:math_models}
 
+Almost all of the references start by intrducing the ideal statistical properties that a Rayleigh channel should have, obtained for the classical model of such channel. This model is presented in \cite{clarke} and it is often referred to as Clarke's 2D isotropic (both scattering and antenna gain) Rayleigh fading model, given by%
+%
+\begin{equation}
+X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)}
+\end{equation}%
+%
+where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
+%
+\begin{align}
+	f_{|X|}(x) = \frac{x}{2} \ e^{-x^2}, \quad x \geq 0\\
+	f_{\theta}(x) = \frac{1}{2\pi}, \quad x \in (-\pi,\pi]
+\end{align}%
+%
+As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to prove the following equations:%
+%
+\begin{subequations}
+\begin{align}
+&R_{X_cX_c}(\tau) = E[X_c(t)X_c(t-\tau)] = \frac{1}{2} J_0(2\pi f_d\tau)\\
+&R_{X_sX_s}(\tau) = \frac{1}{2} J_0(2\pi f_d\tau)\\
+&R_{X_cX_s}(\tau) = R_{X_sX_c}(\tau) = 0\\
+&R_X(\tau) = E[X(t) X^*(t-\tau)] = J_0(2\pi f_d \tau) + j0\\
+&R_{|X|^2}(\tau) = 1 + J_0^2(2\pi f_d \tau)
+\end{align}
+\end{subequations}%
+%
+Where $J_0(x)$ is the zero-order Bessel function of the first kind, defined as%
+%
+\begin{equation}
+J_0(x) = \frac{1}{\pi} \int_0^\pi \cos( x \ \cos(\theta)) \ d\theta
+\end{equation}%
+%
+As you can see, all of these correlations are obtained by a \textit{Wide Sense Stationary} (\textit{WSS}) process, since they only depend on the variable $\tau$.

@@ -87,7 +87,7 @@ title('Level Crossing Rate')
 xlabel('\lambda_{dB}')
 ylabel('LCR(\lambda)')
 
-legend(['Ideal',leg]);
+legend(['Ideal',leg],'Location','southeast');
 
 % use log in y coordinate
 ax = gca;
