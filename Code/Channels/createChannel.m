@@ -55,7 +55,7 @@ switch simulator
     case 'Clarke'
         ch = ClarkeSimulator(fd,t,nSin,NChannels);
     case 'Komninakis'
-        addpath('../Misc');
+        checkMiscAdded();
         ch = KomninakisSimulator(fd,t,NChannels,interpMethod);
     otherwise
         error('Simulator "%s" not recognized',simulator);
@@ -115,6 +115,21 @@ switch durationType
     case 'Tcoh'
         Tcoh = 1/fd;
         t = (0:T:duration*Tcoh)';
+end
+
+end
+% ----------------------------------------------------------------
+function checkMiscAdded()
+
+pathCell = regexp(path, pathsep, 'split');
+if ispc  % Windows is not case-sensitive
+  onPath = any(contains(pathCell,'JakesProject\Code\Misc'));
+else
+  onPath = any(contains(pathCell,'JakesProject/Code/Misc'));
+end
+
+if ~onPath
+    error('"JakesProject/Code/Misc" has to be added to the path')
 end
 
 end

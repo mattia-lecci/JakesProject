@@ -47,7 +47,7 @@ if ischar(simulators)
 end
 
 time = zeros( length(samples),length(simulators) );
-addpath('../Channels')
+checkChannelsAdded();
 
 %% computations
 for j = 1:length(simulators)
@@ -109,7 +109,21 @@ else
 end
 
 end
+%----------------------------------------------------------------------
+function checkChannelsAdded()
 
+pathCell = regexp(path, pathsep, 'split');
+if ispc  % Windows is not case-sensitive
+  onPath = any(contains(pathCell,'JakesProject\Code\Channels'));
+else
+  onPath = any(contains(pathCell,'JakesProject/Code/Channels'));
+end
+
+if ~onPath
+    error('"JakesProject/Code/Channels" has to be added to the path')
+end
+
+end
 % ---------------------------------------------------------------------
 function time = computeTimePerSample( sim,precision,sample,...
     precisionType,fd,T,nSin,interpMethod )

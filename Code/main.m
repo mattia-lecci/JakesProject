@@ -8,7 +8,7 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 % main parameters
 loadStats =     false;
 loadSimTime =   true;
-saveStats =     true;
+saveStats =     false;
 saveSimTime =   false;
 
 % createChannel parameters
