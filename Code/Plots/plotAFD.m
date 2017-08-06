@@ -65,11 +65,13 @@ end
 function plots = plotafd(AFD,leg,fd,RMS)
 
 % init
-Xlim = 20*log10( [min(AFD.thresh) max(AFD.thresh)] );
+Xlim = 20*log10( [min(AFD(1).thresh) max(AFD(1).thresh)] );
 
 % ideal
 lam = @(x) 10.^(x/20);
 ideal = @(x) ( exp(lam(x).^2)-1 )./( sqrt(2*pi)*fd*lam(x) );
+
+figure
 plots(1) = fplot(ideal,Xlim,'k','LineWidth',1.5);
 hold on; grid on;
 

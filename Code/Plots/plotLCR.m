@@ -65,11 +65,13 @@ end
 function plots = plotlcr(LCR,leg,fd,RMS)
 
 % init
-Xlim = 20*log10( [min(LCR.thresh) max(LCR.thresh)] );
+Xlim = 20*log10( [min(LCR(1).thresh) max(LCR(1).thresh)] );
 
 % ideal
 lam = @(x) 10.^(x/20);
 ideal = @(x) sqrt(2*pi)*fd*lam(x).*exp(-lam(x).^2);
+
+figure
 plots(1) = fplot(ideal,Xlim,'k','LineWidth',1.5);
 hold on; grid on;
 

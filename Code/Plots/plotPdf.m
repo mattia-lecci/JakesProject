@@ -56,15 +56,20 @@ magSubfields = {'fit','normBinCount','edges'};
 phaseSubfields = {'normBinCount','edges'};
 
 % check fields
-fieldsOk = isfield(PDF,fields);
-if all(fieldsOk)
+if isvector(PDF)
     
-    magSubOk = isfield(PDF.magnitude,magSubfields);
-    phaseSubOk = isfield(PDF.phase,phaseSubfields);
-    isVec = isvector(PDF);
-    
-    b = all( [magSubOk,phaseSubOk,isVec] );
-    
+    fieldsOk = isfield(PDF(1),fields);
+    if all(fieldsOk)
+
+        magSubOk = isfield(PDF(1).magnitude,magSubfields);
+        phaseSubOk = isfield(PDF(1).phase,phaseSubfields);
+
+
+        b = all( [magSubOk,phaseSubOk] );
+
+    else
+        b = false;
+    end
 else
     b = false;
 end

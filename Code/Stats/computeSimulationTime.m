@@ -21,9 +21,10 @@ function [samples,time] = computeSimulationTime(simulators,varargin)
 % Name-Value pairs:
 % - fd: doppler spread to be used in createChannel. Default: 10 [Hz]
 % - T: sampling period. Default: 0.01 [s]
-% - nSin: number of sinusoids to be used. Default: 10
-% - interpMethod: interpolation method to be used for Komninakis simulator.
-%   Default: 'spline'. See createChannel for more infomation.
+% - NSin: number of sinusoids to be used. Default: 10
+% - InterpMethod: interpolation method to be used for Komninakis simulator.
+%       Default: 'spline'. See createChannel for more infomation.
+% - PrecisionType: {'%' (default), 'ms}
 %
 % See also: CREATECHANNEL
 
@@ -36,8 +37,9 @@ precision = p.Results.precision;
 samples = p.Results.NsamplesList;
 fd = p.Results.fd;
 T = p.Results.T;
-nSin = p.Results.nSin;
-interpMethod = p.Results.interpMethod;
+nSin = p.Results.NSin;
+interpMethod = p.Results.InterpMethod;
+precisionType = p.Results.PrecisionType;
 
 % init (force simulators to be cell array)
 if ischar(simulators)
@@ -51,7 +53,7 @@ addpath('../Channels')
 for j = 1:length(simulators)
     for i = 1:length(samples)
         time(i,j) = computeTimePerSample( simulators{j},precision,...
-            samples(i),fd,T,nSin,interpMethod );
+            samples(i),precisionType,fd,T,nSin,interpMethod );
     end
 end
     
@@ -60,6 +62,7 @@ end
     function inputCheck()
         
         interpMethodsList = {'filter','spline','pchip','linear'};
+        precisionTypeList = {'%','ms'};
         
         p.addRequired('simulators', @(x)checkValidSimList(x));
         p.addOptional('precision',.05,...
@@ -73,10 +76,12 @@ end
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
         p.addParameter('T',.01,...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
-        p.addParameter('nSin',10,...
+        p.addParameter('NSin',10,...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive','integer'}));
-        p.addParameter('interpMethod','spline',...
+        p.addParameter('InterpMethod','spline',...
             @(x)any(validatestring(x,interpMethodsList)));
+        p.addParameter('PrecisionType','%',...
+            @(x)any(validatestring(x,precisionTypeList)));
         
         
         p.parse(simulators,varargin{:});
@@ -106,7 +111,8 @@ end
 end
 
 % ---------------------------------------------------------------------
-function time = computeTimePerSample( sim,precision,sample,fd,T,nSin,interpMethod )
+function time = computeTimePerSample( sim,precision,sample,...
+    precisionType,fd,T,nSin,interpMethod )
 
 % init
 timeList = zeros(1000,1);
@@ -134,7 +140,7 @@ while ~isCIok
     
     % check Confidence Interval
     if i>3
-        [isCIok,timeList(1:i),i] = checkCI( timeList(1:i),precision );
+        [isCIok,timeList(1:i),i] = checkCI( timeList(1:i),precision,precisionType );
     end
 end
 
@@ -149,7 +155,7 @@ end
 end
 
 % ----------------------------------------------------------------------
-function [isCIok,newv,newi] = checkCI(v,prec)
+function [isCIok,newv,newi] = checkCI(v,prec,precisionType)
 
 % init
 done = false;
@@ -172,6 +178,11 @@ newv = [newv; zeros(length(v)-newi,1)];
 
 % 95% CI below desired precision
 % done==true => avg and stdev are still valid
-isCIok = (1.96*stdev/avg) < prec;
+switch precisionType
+    case '%'
+        isCIok = (1.96*stdev/avg) < prec;
+    case 'ms'
+        isCIok = (1.96*stdev) < prec*1e-3;
+end
 
 end

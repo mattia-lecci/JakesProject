@@ -33,7 +33,7 @@ p = inputParser;
 inputCheck();
 
 % init
-t = XCORR.lags*T*fd;
+t = XCORR(1).lags*T*fd;
 besselLim = [-.6,1.2];
 zeroLim = [-1,1];
 bessel2Lim = [.8,2.2];
@@ -52,11 +52,11 @@ plots.XsXc = plotAll( @(x) 0.*x,...
     t,{XCORR.XsXc},legend,'R_{X_sX_c}','Normalized time (f_d\tau)','',...
     zeroLim);
 plots.ReX = plotAll( @(x) besselj(0,2*pi*x),...
-    t,{real(XCORR.X)},legend,'Re[R_{X}]','Normalized time (f_d\tau)','',...
-    besselLim);
+    t, cellfun(@real,{XCORR.X},'UniformOutput',false),legend,...
+    'Re[R_{X}]','Normalized time (f_d\tau)','',besselLim);
 plots.ImX = plotAll( @(x) 0.*x,...
-    t,{imag(XCORR.X)},legend,'Im[R_{X}]','Normalized time (f_d\tau)','',...
-    zeroLim);
+    t, cellfun(@imag,{XCORR.X},'UniformOutput',false),legend,...
+    'Im[R_{X}]','Normalized time (f_d\tau)','',zeroLim);
 plots.X2 = plotAll( @(x) 1 + besselj(0,2*pi*x).^2,...
     t,{XCORR.X2},legend,'R_{|X|^2}','Normalized time (f_d\tau)','',bessel2Lim);
 
@@ -108,6 +108,7 @@ hold on; grid on;
 for i = 1:length(others)
     plots(i+1) = plot(t,others{i}); %#ok<AGROW>
 end
+hold off
 
 % aesthetic
 title(tit)

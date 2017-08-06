@@ -6,10 +6,10 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 
 %% Parameters
 % main parameters
-loadMat = false;
-saveMat = false;
-calcStats = false;
-calcTime = true;
+loadStats =     false;
+loadSimTime =   true;
+saveStats =     true;
+saveSimTime =   false;
 
 % createChannel parameters
 fd = 10;
@@ -28,57 +28,56 @@ legend = simList;
 pdfInd = [];
 binMethod = 'auto';
 maxlag = [];
-thresholds = logspace(-3,1,25)';
+thresholds = logspace(-3,.5,25)';
 
 % computeSimulationTime parameters
 % simList,... same as createChannel
-precision = .1;
+precision = 10;
 NsamplesList = round( logspace(3,6,20)' );
+precisionType = 'ms';
 
 
 %% Stats
 
-if calcStats
+if loadStats
+    load('SavedData/stats');
+else
     for i = 1:length(simList)
-        if loadMat
-            load('SavedData/stats'); %#ok<UNRCH>
-        else
-            [ch,t] = createChannel(fd,T,duration,simList{i},nSin,...
-                'DurationType','Tcoh','NChannels',Nchannels,'InterpMethod',interpMethod);
-            
-            % check validity of possibly empty parameters
-            if isempty(pdfInd)
-                pdfInd = size(ch,1);
-            end
-            if isempty(maxlag)
-                maxlag = size(ch,1)-1;
-            end
-            
-            stats(i) = computeAllStats(ch,t,'pdfInd',pdfInd,...
-                'binMethod',binMethod,'maxlag',maxlag,'thresholds',thresholds); %#ok<SAGROW>
-            
-            
-            if saveMat
-                save('SavedData/stats'); %#ok<UNRCH>
-            end
+        
+        [ch,t] = createChannel(fd,T,duration,simList{i},nSin,...
+            'DurationType','Tcoh','NChannels',Nchannels,'InterpMethod',interpMethod);
+        
+        % check validity of possibly empty parameters
+        if isempty(pdfInd)
+            pdfInd = size(ch,1);
         end
+        if isempty(maxlag)
+            maxlag = size(ch,1)-1;
+        end
+        
+        stats(i) = computeAllStats(ch,t,'pdfInd',pdfInd,...
+            'binMethod',binMethod,'maxlag',maxlag,'thresholds',thresholds);
+    end
+    
+    
+    if saveStats
+        save('SavedData/stats','stats');
     end
 end
+
 
 % free some memory
 clear 'ch' 't'
 
-if calcTime
-    if loadMat %#ok<UNRCH>
-        load('SavedData/simTime'); 
-    else
-        [samples,time] = computeSimulationTime(simList,precision,NsamplesList,...
-            'fd',fd,'T',T,'nSin',nSin,'interpMethod',interpMethod); 
-        
-        
-        if saveMat
-            save('SavedData/simTime'); 
-        end
+if loadSimTime
+    load('SavedData/simTime');
+else
+    [samples,time] = computeSimulationTime(simList,precision,NsamplesList,...
+        'fd',fd,'T',T,'nSin',nSin,'interpMethod',interpMethod);
+    
+    
+    if saveSimTime
+        save('SavedData/simTime','samples','time');
     end
 end
 
@@ -88,4 +87,4 @@ pdfPlots = plotPdf([stats.pdf],legend);
 xcorrPlots = plotXcorr([stats.xcorr],legend,fd,T);
 LCRPlots = plotLCR([stats.LCR],legend,fd);
 AFDPlots = plotAFD([stats.AFD],legend,fd);
-%SimTimePlots = plotSimulationTime(samples,time,legend);
+SimTimePlots = plotSimulationTime(samples,time,legend);
