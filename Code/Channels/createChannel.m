@@ -2,17 +2,17 @@ function [ch,t] = createChannel(fd,T,duration,varargin)
 %CREATECHANNEL Create a simulated wirelss Rayleigh fading channel
 %
 % [ch,t] = CREATECHANNEL(fd,T,duration) Creates a channel with maximum
-% doppler frequency fd, sampling period T [s] and duration in seconds using
-% the default Jakes' simulator with 10 rays
+%   doppler frequency fd, sampling period T [s] and duration in seconds using
+%   the default Jakes' simulator with 10 rays
 % [ch,t] = CREATECHANNEL(fd,T,duration,simulator) With the optional
-% argument simulator you can choose the type of simulator from: 'Jakes'
-% (default), 'PopBeaulieu', 'LiHuang', 'ZhengXiao2002', 'ZhengXiao2003',
-% 'XiaoZhengBeaulieu', 'Clarke', 'Komninakis'
+%   argument simulator you can choose the type of simulator from: 'Jakes'
+%   (default), 'PopBeaulieu', 'LiHuang', 'ZhengXiao2002', 'ZhengXiao2003',
+%   'XiaoZhengBeaulieu', 'Clarke', 'Komninakis'
 % [ch,t] = CREATECHANNEL(fd,T,duration,simulator,nSin) With the optional
-% argument nSin you can control the number of sinusoids of the simulator
-% (for all simulators excluding 'Komninakis')
+%   argument nSin you can control the number of sinusoids of the simulator
+%   (for all simulators excluding 'Komninakis')
 % [ch,t] = CREATECHANNEL(...,Name,Value) Add Value-Name pairs as additional
-% options
+%   options
 %
 % Value-Name pairs:
 % - 'DurationType': {'time' (default), 'samples','Tcoh'}. Tcoh is the
@@ -67,7 +67,7 @@ end
         simulatorsList = {'Jakes','PopBeaulieu','LiHuang',...
             'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu',...
             'Clarke','Komninakis'};
-        sampMethodsList = {'filter','spline','pchip','linear'};
+        interpMethodsList = {'filter','spline','pchip','linear'};
         
         p.addRequired('fd',...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive'}));
@@ -84,7 +84,7 @@ end
         p.addParameter('NChannels',1,...
             @(x)validateattributes(x,{'numeric'},{'scalar','integer','positive'}));
         p.addParameter('interpMethod','spline',...
-            @(x)any(validatestring(x,sampMethodsList)));
+            @(x)any(validatestring(x,interpMethodsList)));
         
         p.parse(fd,T,duration,varargin{:})
         

@@ -31,7 +31,7 @@ xlabel('#samples')
 ylabel('time [s]')
 xlim([min(samples) max(samples)])
 
-legend(plots,Legend) % do not display first entry
+legend(plots,Legend,'Location','northwest') % do not display first entry
 
 %% Argument checker
     function inputCheck()

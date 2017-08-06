@@ -16,11 +16,12 @@ function stats = computeAllStats(ch,t,varargin)
 % Name-Value pairs:
 % - 'pdfInd': second required input ('ind') of computePdf. Default: last
 %   sample (i.e. size(ch,1) )
-% - 'binMethod': third optional input of computePdf. Default: 'sqrt'
+% - 'binMethod': third optional input of computePdf. Default: 'auto'
 % - 'maxlag': second optional input of computeXcorr. Default: size(ch,1)-1,
 %   i.e. maximum allowed lag
 % - 'thresholds': third optional input of both computeLCR and computeAFD.
-%   Default: 25 equally log-spaced values between the min and max magnitude of ch
+%   Default: 25 equally log-spaced values between the min and max magnitude
+%   of ch
 %
 % See also: COMPUTEPDF, COMPUTEXCORR, COMPUTELCR, COMPUTEAFD
 
@@ -59,7 +60,7 @@ stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
         
         % computePdf
         p.addParameter('pdfInd',size(ch,1));
-        p.addParameter('binMethod','sqrt');
+        p.addParameter('binMethod','auto');
         % computeXcorr
         p.addParameter('maxlag',size(ch,1)-1);
         % computeLCR/computeAFD

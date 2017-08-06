@@ -59,6 +59,8 @@ end
 %% Agrument checker
     function inputCheck()
         
+        interpMethodsList = {'filter','spline','pchip','linear'};
+        
         p.addRequired('simulators', @(x)checkValidSimList(x));
         p.addOptional('precision',.05,...
             @(x)validateattributes(x,{'numeric'},{'positive','scalar'}));
@@ -74,7 +76,7 @@ end
         p.addParameter('nSin',10,...
             @(x)validateattributes(x,{'numeric'},{'scalar','positive','integer'}));
         p.addParameter('interpMethod','spline',...
-            @(x)any(validatestring(x,sampMethodsList)));
+            @(x)any(validatestring(x,interpMethodsList)));
         
         
         p.parse(simulators,varargin{:});
@@ -138,8 +140,10 @@ end
 
 time = mean( timeList(1:i) );
 
+
+%% debug
 if true
-    fprintf('Sim=%s, prec=%.2f, Nsamp=%9d, i=%d\n',sim,precision,sample,i);
+    fprintf('Sim=%s, prec=%.2f, Nsamp=%9d, i=%3d, time=%6.3f\n',sim,precision,sample,i,time);
 end
 
 end

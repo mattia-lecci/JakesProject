@@ -34,6 +34,7 @@ inputCheck();
 
 % name inputs
 binMethod = p.Results.binMethod;
+ind = p.Results.ind;
 
 %% fit pdf
 N = length(ind);
