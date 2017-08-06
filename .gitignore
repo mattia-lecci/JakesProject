@@ -8,6 +8,10 @@
 *.dvi
 *.auxlock
 *.md5
+*.run.xml
+*.blg
+*.bcf
+*.bbl
 
 # Papers
 Reference/
