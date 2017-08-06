@@ -4,6 +4,8 @@ function stats = computeAllStats(ch,t,varargin)
 % stats = computeAllStats(ch,t) Computes all of the statistics of channel
 %   ch based on time vector t and puts them in the structure stats, later
 %   described
+% stats = computeAllStats(ch,t,simulator) If ch is the output of a Jakes
+%   simulator, specify simulator as 'Jakes'. Otherwise insert 'Other'.
 % stats = computeAllStats(...,Name,Value) Name-Value pairs can be added to
 %   better control the details of the statistics
 %
@@ -30,6 +32,7 @@ p = inputParser;
 inputCheck();
 
 % name inputs
+simulator = p.Results.simulator;
 pdfInd = p.Results.pdfInd;
 binMethod = p.Results.binMethod;
 maxlag = p.Results.maxlag;
@@ -40,11 +43,20 @@ T = t(2)-t(1);
 duration = t(end)-t(1);
 
 % calls to functions
-stats.pdf = computePdf( ch,pdfInd,binMethod ); % compute pdf on last sample
-stats.xcorr = computeXcorr( ch,maxlag ); % compute all type of auto and cross correlation
-stats.LCR = computeLCR( ch,duration,thresh ); % compute LCR
-stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
-
+switch simulator
+    case 'Other'
+        stats.pdf = computePdf( ch,pdfInd,binMethod ); % compute pdf on last sample
+        stats.xcorr = computeXcorr( ch,maxlag ); % compute all type of auto and cross correlation
+        stats.LCR = computeLCR( ch,duration,thresh ); % compute LCR
+        stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
+    case 'Jakes'
+        stats.pdf = computePdf( ch(:,1).',pdfInd,binMethod ); % compute pdf on last sample
+        stats.xcorr = computeXcorr( ch,maxlag,'Jakes' ); % compute all type of auto and cross correlation
+        stats.LCR = computeLCR( ch,duration,thresh ); % compute LCR
+        stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
+    otherwise
+        error('Simulator %s not recognized',simulator);
+end
 
 %% Argument checker
     function inputCheck()
@@ -54,6 +66,8 @@ stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
         p.addRequired('t',...
             @(x)validateattributes(x,{'numeric'},{'vector','real',...
             'numel',size(ch,1)}));
+        p.addOptional('simulator','Other',...
+            @(x)any(validatestring(x,{'Jakes','Other'})));
         
         % optional parameters. attributes will be checked by the specific
         % functions

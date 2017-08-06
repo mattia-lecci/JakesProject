@@ -131,7 +131,7 @@ function phasePlot = plotPhase(ph,leg)
 
 % ideal
 figure
-phasePlot(1) = plot([-pi,pi],[1 1]/(2*pi),'k','LineWidth',1.5);
+phasePlot(1) = fplot(@(x) 0*x+1/(2*pi),[-pi, pi],'k','LineWidth',1.5);
 hold on; grid on
 
 % plot given histograms

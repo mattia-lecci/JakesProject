@@ -14,20 +14,20 @@ saveSimTime =   false;
 % createChannel parameters
 fd = 10;
 T = .01;
-duration = 10;
+duration = 10; durationJakes = 1e4;
 nSin = 8;
 durationType = 'Tcoh';
 Nchannels = 1e3;
 interpMethod = 'spline';
 simList = {'Clarke','Jakes','PopBeaulieu','LiHuang',...
-            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu',...
+            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu',... 
             'Komninakis'};
 legend = simList;
 
 % computeAllStats parameters
 pdfInd = [];
 binMethod = 'auto';
-maxlag = [];
+maxlag = 100;
 thresholds = logspace(-3,.5,25)';
 
 % computeSimulationTime parameters
@@ -44,8 +44,16 @@ if loadStats
 else
     for i = 1:length(simList)
         
-        [ch,t] = createChannel(fd,T,duration,simList{i},nSin,...
-            'DurationType','Tcoh','NChannels',Nchannels,'InterpMethod',interpMethod);
+        switch simList{i}
+            case 'Jakes'
+                [ch,t] = createChannel(fd,T,durationJakes,simList{i},nSin,...
+                    'DurationType',durationType,'NChannels',1,...
+                    'InterpMethod',interpMethod);
+            otherwise
+                [ch,t] = createChannel(fd,T,duration,simList{i},nSin,...
+                    'DurationType',durationType,'NChannels',Nchannels,...
+                    'InterpMethod',interpMethod);
+        end
         
         % check validity of possibly empty parameters
         if isempty(pdfInd)
@@ -55,8 +63,14 @@ else
             maxlag = size(ch,1)-1;
         end
         
-        stats(i) = computeAllStats(ch,t,'pdfInd',pdfInd,...
-            'binMethod',binMethod,'maxlag',maxlag,'thresholds',thresholds);
+        switch simList{i}
+            case 'Jakes'
+                stats(i) = computeAllStats(ch,t,'Jakes','pdfInd',1,...
+                    'binMethod',binMethod,'maxlag',maxlag,'thresholds',thresholds);
+            otherwise
+                stats(i) = computeAllStats(ch,t,'Other','pdfInd',pdfInd,...
+                    'binMethod',binMethod,'maxlag',maxlag,'thresholds',thresholds);
+        end
     end
     
     
