@@ -1,7 +1,7 @@
 \subsection{Mathematical models used} % no limits given
 \label{subsec:math_models}
 
-Almost all of the references start by intrducing the ideal statistical properties that a Rayleigh channel should have, obtained for the classical model of such channel. This model is presented in \cite{clarke} and it is often referred to as Clarke's 2D isotropic (both scattering and antenna gain) Rayleigh fading model, given by%
+Almost all of the references start by introducing the ideal statistical properties that a Rayleigh channel should have, obtained for the classical model of such channel. This model is presented in \cite{clarke} and it is often referred to as \textbf{Clarke}'s 2D isotropic (both scattering and antenna gain) Rayleigh fading model, given by%
 %
 \begin{equation}
 X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)}
@@ -9,10 +9,12 @@ X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)
 %
 where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
 %
+\begin{subequations}
 \begin{align}
-	f_{|X|}(x) = \frac{x}{2} \ e^{-x^2}, \quad x \geq 0\\
+	f_{|X|}(x) = 2x \ e^{-x^2}, \quad x \geq 0\\
 	f_{\theta}(x) = \frac{1}{2\pi}, \quad x \in (-\pi,\pi]
-\end{align}%
+\end{align}
+\end{subequations}%
 %
 As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to prove the following equations:%
 %
@@ -29,7 +31,70 @@ As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to p
 Where $J_0(x)$ is the zero-order Bessel function of the first kind, defined as%
 %
 \begin{equation}
-J_0(x) = \frac{1}{\pi} \int_0^\pi \cos( x \ \cos(\theta)) \ d\theta
+J_0(x) = \frac{1}{\pi} \int_0^\pi \cos( x \ \cos(\theta)) \dd{\theta}
 \end{equation}%
 %
-As you can see, all of these correlations are obtained by a \textit{Wide Sense Stationary} (\textit{WSS}) process, since they only depend on the variable $\tau$.
+As you can see, all of these correlations are obtained from a \textit{Wide Sense Stationary} (\textit{WSS}) process, since they only depend on the variable $\tau$.
+
+% ----------------------------------------------------------------------
+% Jakes
+%-----------------------------------------------------------------------
+Since Clarke's model deals with multiple complex sinusoids and random variables, which are both computationally expansive to calculate, \textbf{Jakes} proposed in \cite{jakes} its well known simplification of such model, which basically became a standard for wireless channel simulation for over 20 years. In order to cut down on computational complexity he makes some assumptions: instead of being random variables, he forces $\alpha_n = \frac{2\pi n}{N}$ and correlates $\phi_n$ in quadruplets in order to obtain the following simplified model:%
+%
+\begin{subequations}
+\begin{align}\label{eq:jakes_xc}
+X_c(t) = \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\cos \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]\\
+\label{eq:jakes_xs}
+X_s(t) = \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\sin \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]
+\end{align}
+\end{subequations}%
+%
+You can see that the model is now fully deterministic and there are about a quarter of the oscillators of the corresponding Clarke's model. In fact, by defining $N = 4M+2$, there are only $M+1$ low frequency oscillators needed. Note that the directions with maximum Doppler spread are forcefully kept.
+
+% ----------------------------------------------------------------------
+% Pop Beaulieu
+%-----------------------------------------------------------------------
+This, though, comes at a price: \textbf{Pop} and \textbf{Beaulieu} state in \cite{A1} that Jakes' simulator is not even stationary and yields poor higher order statistics. To overcome this phenomena a simple modification is proposed: the addition of an initial random phase to the low frequency oscillators. From Eqs.~\ref{eq:jakes_xc},\ref{eq:jakes_xs} the oscillator terms become: $\cos(2\pi f_d t + \phi_0)$ and $\cos( 2\pi f_d \cos \alpha_n \ t + \phi_n)$, where $\phi_n$ are mutually independent uniform random variables in $(-\pi,\pi]$.\\
+Now, a small addition that I did with respect to the original paper is the addition of the multichannel support. This may be useful is different interesting scenarios: multiple independent channels are usually used to model a frequency selective fading and MIMO systems. I, instead, used this feature to estimate all the statistics of the simulators without relying on any ergodicity. For the case of the Pop-Beaulieu simulator, this addition is very simple: calling $X_k(t)$ the $k$-th channel ($k=1,2,...,K$), we just need to generate $K \times(M+1)$ random variables $\phi_{k,n}$.
+
+% ----------------------------------------------------------------------
+% Zheng Xiao 2002
+%-----------------------------------------------------------------------
+In 2002, \textbf{Zheng} and \textbf{Xiao} \cite{C2}. In this paper a model for multichannel simulation is directly given, with the following real and imaginary components:%
+%
+\begin{subequations}
+\begin{align}
+X_{k,c}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(c)} \right)\\
+X_{k,s}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \sin \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(s)} \right)
+\end{align}
+\end{subequations}%
+%
+where $\theta_k,\phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$. This ensures that all the channels have the same statistical properties while being uncorrelated. Note that with respect to the Pop-Beaulieu model it adds randomness on the angle of arrival $\alpha_n$ and uncorrelates the initial phases of real and imaginary components, while not retaining the angles with maximum Doppler spread, having then $N=4M$. This means more than double the quantity of random variables required to perform the simulation.
+
+% ----------------------------------------------------------------------
+% Li Huang
+%-----------------------------------------------------------------------
+Later in 2002, \textbf{Li} and \textbf{Huang} \cite{C1} proposed another approach to a multichannel simulator. Instead of randomizing the directions of arrival, they follow a deterministic approach, similar to Jakes'. Defining $\alpha_{n,k} = \frac{2\pi n}{N} + \frac{2 \pi k}{NK} + \alpha_{0,0}$ for $n = 0,...,N-1$ and $k=0,...,K-1$, the formulas for the $k$-th ray are:%
+%
+\begin{subequations}
+\begin{align}
+X_{k,c}(t) = \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \cos \qty( 2\pi f_d t \cos \alpha_{n,k} + \phi_{n,k}^{(c)} )\\
+X_{k,s}(t) = \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \sin \qty( 2\pi f_d t \sin \alpha_{n,k} + \phi_{n,k}^{(s)} )
+\end{align}
+\end{subequations}%
+%
+as usual $\phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$. It is highlighted the fact that any combination of sine and cosine functions will not affect the actual statistics of the channels. The choice $\alpha_{0,0}$ is suggested by the authors to be in $\qty(0,\frac{2\pi}{NK}) \setminus \qty{\frac{\pi}{NK}}$. In the end I decided to use their same initial angle, meaning $\alpha_{0,0} = \frac{\pi}{2NK}$. The paper then also tries to reduce the high cost of calculating trigonometric functions by proposing different approximations and comparing then the results. I decided, though, to not implement this further in-depth analysis.
+
+% ----------------------------------------------------------------------
+% Zheng Xiao 2003
+%-----------------------------------------------------------------------
+Going on to 2003, \textbf{Zheng} and \textbf{Xiao} \cite{A2} further enhance their simulator by adding a random gain to each oscillator:%
+%
+\begin{subequations}
+\begin{align}
+X_{k,c}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)\\
+X_{k,s}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)
+\end{align}
+\end{subequations}%
+%
+Note that the randomization of the angle of arrival is just the same as their 2002 paper but there are a couple of differences: the initial phase of the oscillators is now constant for all of the oscillators of the same channel (and equal for real and imaginary parts), whereas the difference between oscillators of the same channel is given by the random amplitude, which, even though it's different, it is correlated between real and imaginary components ($\psi_{n,k}$ is the same for both of them).
