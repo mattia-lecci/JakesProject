@@ -6,10 +6,10 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 
 %% Parameters
 % main parameters
-loadStats =     true;
-loadSimTime =   true;
-saveStats =     false;
-saveSimTime =   false;
+loadStats =     false;
+loadSimTime =   false;
+saveStats =     true;
+saveSimTime =   true;
 
 % createChannel parameters
 fd = 10;
@@ -19,8 +19,8 @@ nSin = 8;
 durationType = 'Tcoh';
 Nchannels = 1e3;
 interpMethod = 'spline';
-simList = {'Clarke','Jakes','PopBeaulieu','LiHuang',...
-            'ZhengXiao2002','ZhengXiao2003','XiaoZhengBeaulieu',... 
+simList = {'Clarke','Jakes','PopBeaulieu','ZhengXiao2002',...
+            'LiHuang','ZhengXiao2003','XiaoZhengBeaulieu',...
             'Komninakis'};
 legend = simList;
 
@@ -28,13 +28,13 @@ legend = simList;
 pdfInd = [];
 binMethod = 'auto';
 maxlag = 100;
-thresholds = logspace(-3,.5,25)';
+thresholds = logspace(-1.5,.5,25)';
 
 % computeSimulationTime parameters
 % simList,... same as createChannel
-precision = 10;
+precision = .1;
 NsamplesList = round( logspace(3,6,20)' );
-precisionType = 'ms';
+precisionType = '%';
 
 
 %% Stats
@@ -87,7 +87,8 @@ if loadSimTime
     load('SavedData/simTime');
 else
     [samples,time] = computeSimulationTime(simList,precision,NsamplesList,...
-        'fd',fd,'T',T,'nSin',nSin,'interpMethod',interpMethod);
+        'fd',fd,'T',T,'nSin',nSin,'interpMethod',interpMethod,...
+        'PrecisionType',precisionType);
     
     
     if saveSimTime

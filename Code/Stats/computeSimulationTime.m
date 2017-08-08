@@ -10,7 +10,7 @@ function [samples,time] = computeSimulationTime(simulators,varargin)
 %   different columns).
 % [samples,time] = COMPUTESIMULATIONTIME(simulators,precision) The
 %   simulation is stopped whenever the 95% confidence interval falls below
-%   the given precision, with at leat 4 runs, and then averaged. Here you
+%   the given precision, with at leat 10 runs, and then averaged. Here you
 %   can specify a precision of you choice. Default: 0.05.
 % [samples,time] = COMPUTESIMULATIONTIME(simulators,precision,NsamplesList)
 %   You can specifify the list of required number of samples to test.
@@ -153,8 +153,11 @@ while ~isCIok
     timeList(i) = toc;
     
     % check Confidence Interval
-    if i>3
+    if mod(i,10)==0
         [isCIok,timeList(1:i),i] = checkCI( timeList(1:i),precision,precisionType );
+    end
+    if i>1e3 % to avoid long waits
+        isCIok = true;
     end
 end
 

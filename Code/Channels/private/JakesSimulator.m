@@ -15,8 +15,8 @@ Ntot = 4*nSin+2;
 
 % computations
 cosine = cos(omega.*t); % compute only once
-uc = 2/sqrt(Ntot)*sum( a.*cosine ,2);
-us = 2/sqrt(Ntot)*sum( b.*cosine ,2);
+uc = sqrt(2/Ntot)*sum( a.*cosine ,2);
+us = sqrt(2/Ntot)*sum( b.*cosine ,2);
 
 % channel
 ch = repmat( uc+1j*us ,1,nChannels);
@@ -41,15 +41,15 @@ omega(1) = 2*pi*fd;
 omega(n+1) = 2*pi*fd*cos( 2*pi*n/N );
 
 % beta
-beta(1) = pi/4;
+beta(1) = 0;
 beta(n+1) = pi*n/M;
 
 % a
-a(1) = cos( beta(1) );
-a(n+1) = sqrt(2)*cos( beta(n+1) );
+a(1) = 1;
+a(n+1) = 2*cos( beta(n+1) );
 
 % b
-b(1) = sin( beta(1) );
-b(n+1) = sqrt(2)*sin( beta(n+1) );
+b(1) = 1;
+b(n+1) = 2*sin( beta(n+1) );
 
 end
