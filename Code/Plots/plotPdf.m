@@ -1,8 +1,8 @@
-function plots = plotPdf(PDF,legend)
+function figures = plotPdf(PDF,legend)
 %PLOTPDF Plots probability distribution functions given as output from
 %computePdf
 %
-% plots = PLOTPDF(PDF,legend) Plots all of the precalculated PDFs from the
+% figures = PLOTPDF(PDF,legend) Plots all of the precalculated PDFs from the
 %   function computePdf, plotting first a thick black line representing the
 %   ideal case, and then all of the others containined in the array of struct
 %   PDF. The input legend should contain a cell array of strings containing
@@ -11,14 +11,11 @@ function plots = plotPdf(PDF,legend)
 % Plots the fitted Rayleigh distributions of the magnitude and the line
 % version of the histogram of both the magnitude and phase.
 %
-% OUTPUT: plots is a structure with fields:
-% - plots.magFitPlot
-% - plots.magHistPlot
-% - plots.phaseHistPlot
-% Each of them contain an array with length(PDF)+1 elements, in which the
-% first one contains a FunctionLine object handle (Ideal case), and the
-% others in order contain Line (FunctionLine for magFitPlot) object handles
-% in order for each of the elements in PDF.
+% OUTPUT: figures is a structure with fields:
+% - figures.magFitFigure
+% - figures.magHistFigure
+% - figures.phaseHistFigure
+% Each of them contains a reference to the plot's figure.
 %
 % See also: COMPUTEPDF
 
@@ -27,9 +24,9 @@ p = inputParser;
 inputCheck();
 
 %% Plots
-[plots.magFitPlot,plots.magHistPlot] =...
+[figures.magFitFigure,figures.magHistFigure] =...
     plotMagnitude([PDF.magnitude],legend);
-plots.phaseHistPlot = plotPhase([PDF.phase],legend);
+figures.phaseHistFigure = plotPhase([PDF.phase],legend);
 
 %% Argument checker
     function inputCheck()
@@ -78,7 +75,7 @@ end
 
 % ----------------------------------------------------------------------
 
-function [magFitPlot,magHistPlot] = plotMagnitude(mag,leg)
+function [magFitFig,magHistFig] = plotMagnitude(mag,leg)
 
 %% Plot fit
 % init
@@ -87,14 +84,14 @@ Xlim = [0 3];
 % ideal pdf
 ideal = makedist('Rayleigh','b',1/sqrt(2));
 
-figure
-magFitPlot(1) = fplot(@ideal.pdf,Xlim,'k','LineWidth',1.5);
+magFitFig = figure;
+fplot(@ideal.pdf,Xlim,'k','LineWidth',1.5);
 hold on; grid on
 
 % plot given pdfs
 for i = 1:length(mag)
     fittedDistrib = mag(i).fit;
-    magFitPlot(i+1) = fplot(@fittedDistrib.pdf,Xlim); %#ok<AGROW>
+    fplot(@fittedDistrib.pdf,Xlim);
 end
 
 hold off
@@ -108,12 +105,12 @@ legend( [{'Ideal'}, leg] );
 
 %% Plot hitogram
 % ideal pdf
-figure
-magHistPlot(1) = fplot(@ideal.pdf,Xlim,'k','LineWidth',1.5);
+magHistFig = figure;
+fplot(@ideal.pdf,Xlim,'k','LineWidth',1.5);
 hold on; grid on
 
 % plot given histograms
-magHistPlot(2:length(mag)+1) = plotHistogram({mag.normBinCount},{mag.edges});
+plotHistogram({mag.normBinCount},{mag.edges});
 hold off
 
 % plot aesthetic
@@ -127,15 +124,15 @@ legend(['Ideal',leg])
 end
 
 % -----------------------------------------------------------------------
-function phasePlot = plotPhase(ph,leg)
+function phaseFig = plotPhase(ph,leg)
 
 % ideal
-figure
-phasePlot(1) = fplot(@(x) 0*x+1/(2*pi),[-pi, pi],'k','LineWidth',1.5);
+phaseFig = figure;
+fplot(@(x) 0*x+1/(2*pi),[-pi, pi],'k','LineWidth',1.5);
 hold on; grid on
 
 % plot given histograms
-phasePlot(2:length(ph)+1) = plotHistogram({ph.normBinCount},{ph.edges});
+plotHistogram({ph.normBinCount},{ph.edges});
 hold off
 
 % plot aesthetic
@@ -149,13 +146,13 @@ legend(['Ideal',leg])
 end
 
 % ----------------------------------------------------------------------
-function plots = plotHistogram(binval,edges)
+function  plotHistogram(binval,edges)
 
 % init
 centers = getBinCenters(edges);
 
 for i = 1:length(binval)
-    plots(i) = plot(centers{i},binval{i}); %#ok<AGROW>
+    plot(centers{i},binval{i});
 end
 
 end

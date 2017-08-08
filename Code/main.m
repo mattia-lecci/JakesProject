@@ -6,10 +6,10 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 
 %% Parameters
 % main parameters
-loadStats =     false;
-loadSimTime =   false;
-saveStats =     true;
-saveSimTime =   true;
+loadStats =     true;
+loadSimTime =   true;
+saveStats =     false;
+saveSimTime =   false;
 
 % createChannel parameters
 fd = 10;
@@ -98,8 +98,8 @@ end
 
 %% Plots
 
-pdfPlots = plotPdf([stats.pdf],legend);
-xcorrPlots = plotXcorr([stats.xcorr],legend,fd,T);
-LCRPlots = plotLCR([stats.LCR],legend,fd);
-AFDPlots = plotAFD([stats.AFD],legend,fd);
-SimTimePlots = plotSimulationTime(samples,time,legend);
+pdfFig = plotPdf([stats.pdf],legend);
+xcorrFig = plotXcorr([stats.xcorr],legend,fd,T);
+LCRFig = plotLCR([stats.LCR],legend,fd);
+AFDFig = plotAFD([stats.AFD],legend,fd);
+SimTimeFig = plotSimulationTime(samples,time,legend);
