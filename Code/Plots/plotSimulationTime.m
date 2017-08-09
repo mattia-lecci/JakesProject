@@ -15,6 +15,9 @@ function fig = plotSimulationTime(samples,time,Legend)
 p = inputParser;
 inputCheck();
 
+% init
+Legend = {Legend{:}}; % row
+
 %% Plots
 fig = figure;
 loglog(0,0); % to keep the same colours, the other stats have an Ideal plot
@@ -32,7 +35,7 @@ ylabel('time [s]')
 xlim([min(samples) max(samples)])
 
 plotsWithLegend = fig.Children.Children(2:end); % first one is just a dummy plot
-legend(plotsWithLegend,Legend,'Location','northwest') % do not display first entry
+legend(plotsWithLegend,Legend,'Location','northwest'); % do not display first entry
 
 %% Argument checker
     function inputCheck()

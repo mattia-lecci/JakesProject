@@ -23,6 +23,9 @@ function figures = plotPdf(PDF,legend)
 p = inputParser;
 inputCheck();
 
+% init
+legend = {legend{:}}; % row
+
 %% Plots
 [figures.magFitFigure,figures.magHistFigure] =...
     plotMagnitude([PDF.magnitude],legend);

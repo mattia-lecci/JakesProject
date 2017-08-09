@@ -21,6 +21,9 @@ inputCheck();
 % name inputs
 RMS = p.Results.RMS;
 
+% init
+legend = {legend{:}}; % row
+
 %% Plot
 figure = plotafd(AFD,legend,fd,RMS);
 

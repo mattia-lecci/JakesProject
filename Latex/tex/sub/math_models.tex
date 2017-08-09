@@ -7,7 +7,7 @@ Almost all of the references start by introducing the ideal statistical properti
 X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)}
 \end{equation}%
 %
-where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal ($\mathcal{CN}$) distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
+where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent, fo a total of $2 \times N$ random variables. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal ($\mathcal{CN}$) distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
 %
 \begin{subequations}
 \begin{align}
@@ -78,7 +78,7 @@ X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \sin \lef
 \end{align}
 \end{subequations}%
 %
-where $\theta_k, \ \phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$. This ensures that all the channels have the same statistical properties while being uncorrelated. Note that with respect to the Pop-Beaulieu model it adds randomness on the angle of arrival $\alpha_n$ and uncorrelates the initial phases of real and imaginary components, while not retaining the angles with maximum Doppler spread, having then $N=4M$. This means more than double the quantity of random variables required to perform the simulation.
+where $\theta_k, \ \phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$, for a total of $K \times (2M+1)$ random variables. This ensures that all the channels have the same statistical properties while being uncorrelated. Note that with respect to the Pop-Beaulieu model it adds randomness on the angle of arrival $\alpha_n$ and uncorrelates the initial phases of real and imaginary components, while not retaining the angles with maximum Doppler spread, having then $N=4M$. This means more than double the quantity of random variables required to perform the simulation.
 
 % ----------------------------------------------------------------------
 % Li Huang
@@ -92,7 +92,7 @@ X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \sin \qty( 2\pi f_d t \sin \al
 \end{align}
 \end{subequations}%
 %
-as usual $\phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$. It is highlighted the fact that any combination of sine and cosine functions will not affect the actual statistics of the channels. The choice $\alpha_{0,0}$ is suggested by the authors to be in $\qty(0,\frac{2\pi}{NK}) \setminus \qty{\frac{\pi}{NK}}$. In the end I decided to use their same initial angle, meaning $\alpha_{0,0} = \frac{\pi}{2NK}$. The paper then also tries to reduce the high cost of calculating trigonometric functions by proposing different approximations and comparing then the results. I decided, though, to not implement this further in-depth analysis.
+as usual $\phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$, for a total of $2\times M \times K$ random variables. It is highlighted the fact that any combination of sine and cosine functions will not affect the actual statistics of the channels. The choice $\alpha_{0,0}$ is suggested by the authors to be in $\qty(0,\frac{2\pi}{NK}) \setminus \qty{\frac{\pi}{NK}}$. In the end I decided to use their same initial angle, meaning $\alpha_{0,0} = \frac{\pi}{2NK}$. The paper then also tries to reduce the high cost of calculating trigonometric functions by proposing different approximations and comparing then the results. I decided, though, to not implement this further in-depth analysis.
 
 % ----------------------------------------------------------------------
 % Zheng Xiao 2003
@@ -106,7 +106,7 @@ X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin(\psi_{n,k})\cos \left( 2\pi
 \end{align}
 \end{subequations}%
 %
-Note that the randomization of the angle of arrival is just the same as their 2002 paper but there are a couple of differences: the initial phase of the oscillators is now constant for all of the oscillators of the same channel (and equal for real and imaginary parts, similarly to the Pop-Beaulieu model), whereas the difference between oscillators of the same channel is given by the random amplitude, which, even though it's different, it is correlated between real and imaginary components ($\psi_{n,k}$ is the same for both of them).
+Note that the randomization of the angle of arrival is just the same as their 2002 paper but there are a couple of differences: the initial phase of the oscillators is now constant for all of the oscillators of the same channel (and equal for real and imaginary parts, similarly to the Pop-Beaulieu model), whereas the difference between oscillators of the same channel is given by the random amplitude, which, even though it's different, it is correlated between real and imaginary components ($\psi_{n,k}$ is the same for both of them). A total of $K \times (M+2)$ is needed.
 
 % ----------------------------------------------------------------------
 % Xiao Zheng Beaulieu
