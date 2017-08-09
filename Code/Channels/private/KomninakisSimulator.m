@@ -43,7 +43,7 @@ ch(1:Nexcess,:) = [];
                 BW = 2*fd; % filter bandwidth
                 inRate = 1/Tp;
                 outRate = 1/T;
-                tolerance = .01;
+                tolerance = .02;
                 attenuation = 40; % dB
                 
                 % create filter

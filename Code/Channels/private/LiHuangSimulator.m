@@ -4,7 +4,7 @@ function ch = LiHuangSimulator(fd,t,nSin,nChannels)
 % See also: CREATECHANNEL
 
 %% create channels
-[omega,phi,phi1] = getVariables(fd,nSin,nChannels);
+[omega,phic,phis] = getVariables(fd,nSin,nChannels);
 
 % init
 ch = zeros( size(t,1),nChannels );
@@ -18,8 +18,8 @@ end
     function ch = computeChannel(k)
         
         ch = sqrt(1/nSin)*sum(...
-            cos( omega(k,:).*t + phi(k,:) ) +...
-         1j*sin( omega(k,:).*t + phi1(k,:) )...
+            cos( omega(k,:).*t + phic(k,:) ) +...
+         1j*sin( omega(k,:).*t + phis(k,:) )...
                                 ,2);
     end
 

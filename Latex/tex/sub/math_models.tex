@@ -7,7 +7,7 @@ Almost all of the references start by introducing the ideal statistical properti
 X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)}
 \end{equation}%
 %
-where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
+where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal ($\mathcal{CN}$) distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
 %
 \begin{subequations}
 \begin{align}
@@ -16,9 +16,10 @@ where N is the number of propagation paths, $f_d$ is the maximum Doppler frequen
 \end{align}
 \end{subequations}%
 %
-As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to prove the following equations:%
+As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to prove the following correlations:%
 %
 \begin{subequations}
+	\label{eqs:correlations}
 \begin{align}
 &R_{X_cX_c}(\tau) = E[X_c(t)X_c(t-\tau)] = \frac{1}{2} J_0(2\pi f_d\tau)\\
 &R_{X_sX_s}(\tau) = \frac{1}{2} J_0(2\pi f_d\tau)\\
@@ -31,10 +32,18 @@ As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to p
 Where $J_0(x)$ is the zero-order Bessel function of the first kind, defined as%
 %
 \begin{equation}
-J_0(x) = \frac{1}{\pi} \int_0^\pi \cos( x \ \cos(\theta)) \dd{\theta}
+J_0(x) = \frac{1}{\pi} \int_0^\pi \cos( x \ \cos\theta) \dd{\theta}
 \end{equation}%
 %
-As you can see, all of these correlations are obtained from a \textit{Wide Sense Stationary} (\textit{WSS}) process, since they only depend on the variable $\tau$.
+As you can see, all of these correlations are obtained from a \textit{Wide Sense Stationary} (\textit{WSS}) process, since they only depend on the variable $\tau$.\\
+Another two very interesting properties which can be extracted from Clarke's model are called \textit{Level Crossing Rate} (\textit{LCR}) and \textit{Average Fade Duration} (\textit{AFD}). They both characterize what happen at certain thresholds for the wireless channel and it's generally a higher order behavior: while LCR determines the rate at which the envelope crosses a thresholds with positive slope, AFD indicates for how long the channel will stay below the given threshold in average. They are clearly important parameters to consider when designing a wireless system and the appropriate channel coding. Ideally, their formulas are respectively:%
+%
+\begin{align}
+L_{|X|}(\lambda) &= \sqrt{2\pi} f_d \lambda e^{-\lambda^2}\\
+T_{|X|}(\lambda) &= \frac{e^{\lambda^2} - 1}{\sqrt{2\pi} f_d \lambda}
+\end{align}%
+%
+where $\lambda$ is the normalized fading envelope threshold defined as $\lambda = |X_{thr}|/|X_{rms}|$. Since we are dealing with unit power simulations, then, $\lambda$ is simply equal to the threshold itself.
 
 % ----------------------------------------------------------------------
 % Jakes
@@ -43,9 +52,9 @@ Since Clarke's model deals with multiple complex sinusoids and random variables,
 %
 \begin{subequations}
 \begin{align}\label{eq:jakes_xc}
-X_c(t) = \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\cos \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]\\
+X_c(t) &= \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\cos \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]\\
 \label{eq:jakes_xs}
-X_s(t) = \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\sin \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]
+X_s(t) &= \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\sin \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]
 \end{align}
 \end{subequations}%
 %
@@ -64,12 +73,12 @@ In 2002, \textbf{Zheng} and \textbf{Xiao} \cite{C2}. In this paper a model for m
 %
 \begin{subequations}
 \begin{align}
-X_{k,c}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(c)} \right)\\
-X_{k,s}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \sin \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(s)} \right)
+X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(c)} \right)\\
+X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \sin \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(s)} \right)
 \end{align}
 \end{subequations}%
 %
-where $\theta_k,\phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$. This ensures that all the channels have the same statistical properties while being uncorrelated. Note that with respect to the Pop-Beaulieu model it adds randomness on the angle of arrival $\alpha_n$ and uncorrelates the initial phases of real and imaginary components, while not retaining the angles with maximum Doppler spread, having then $N=4M$. This means more than double the quantity of random variables required to perform the simulation.
+where $\theta_k, \ \phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$. This ensures that all the channels have the same statistical properties while being uncorrelated. Note that with respect to the Pop-Beaulieu model it adds randomness on the angle of arrival $\alpha_n$ and uncorrelates the initial phases of real and imaginary components, while not retaining the angles with maximum Doppler spread, having then $N=4M$. This means more than double the quantity of random variables required to perform the simulation.
 
 % ----------------------------------------------------------------------
 % Li Huang
@@ -78,8 +87,8 @@ Later in 2002, \textbf{Li} and \textbf{Huang} \cite{C1} proposed another approac
 %
 \begin{subequations}
 \begin{align}
-X_{k,c}(t) = \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \cos \qty( 2\pi f_d t \cos \alpha_{n,k} + \phi_{n,k}^{(c)} )\\
-X_{k,s}(t) = \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \sin \qty( 2\pi f_d t \sin \alpha_{n,k} + \phi_{n,k}^{(s)} )
+X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \cos \qty( 2\pi f_d t \cos \alpha_{n,k} + \phi_{n,k}^{(c)} )\\
+X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \sin \qty( 2\pi f_d t \sin \alpha_{n,k} + \phi_{n,k}^{(s)} )
 \end{align}
 \end{subequations}%
 %
@@ -92,9 +101,36 @@ Going on to 2003, \textbf{Zheng} and \textbf{Xiao} \cite{A2} further enhance the
 %
 \begin{subequations}
 \begin{align}
-X_{k,c}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)\\
-X_{k,s}(t) = \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)
+X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)\\
+X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)
 \end{align}
 \end{subequations}%
 %
-Note that the randomization of the angle of arrival is just the same as their 2002 paper but there are a couple of differences: the initial phase of the oscillators is now constant for all of the oscillators of the same channel (and equal for real and imaginary parts), whereas the difference between oscillators of the same channel is given by the random amplitude, which, even though it's different, it is correlated between real and imaginary components ($\psi_{n,k}$ is the same for both of them).
+Note that the randomization of the angle of arrival is just the same as their 2002 paper but there are a couple of differences: the initial phase of the oscillators is now constant for all of the oscillators of the same channel (and equal for real and imaginary parts, similarly to the Pop-Beaulieu model), whereas the difference between oscillators of the same channel is given by the random amplitude, which, even though it's different, it is correlated between real and imaginary components ($\psi_{n,k}$ is the same for both of them).
+
+% ----------------------------------------------------------------------
+% Xiao Zheng Beaulieu
+%-----------------------------------------------------------------------
+In 2006, the most recent paper about \textit{Sum of Sinusoids} simulator that I considered was written by \textbf{Xiao}, \textbf{Zheng} and \textbf{Beaulieu} \cite{B1}. Once again, the simulator is a \textit{SoS} and introduces slight differences with respect to the others%
+%
+\begin{subequations}
+	\begin{align}
+	X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \cos \left( \frac{2\pi n  + \theta_{n,k}}{M}\right) + \phi_{n,k} \right)\\
+	X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin \left( 2\pi f_d t \cos \left( \frac{2\pi n  + \theta_{n,k}}{M}\right) + \phi_{n,k} \right)
+	\end{align}
+\end{subequations}%
+%
+The main differences with previous models are: no random amplitude for the oscillators is present, both $\theta$ and $\phi$ are independent between channels and oscillators (with a total number of $2 \times K \times M$ random variables required) although they are the same for real and imaginary components, the angle of arrival $\alpha_{n,k}$ has changed using only $M$ instead of $4M$ as the denominator. Similarly to the 2 previous papers from Zheng and Xiao, the angle of arrival is randomized but within sectors, in order to force a "more uniform" distribution, particularly for small values of $M$, with respect to the pure uniform distribution of the original Clarke's model.
+
+% ----------------------------------------------------------------------
+% Komninakis
+%-----------------------------------------------------------------------
+As the last one, I decided to keep the \textbf{Komninakis} simulator \cite{A3} since it's completely different from all the others, even though it's actually from 2003. In fact, while all the previous ones are based on the \textit{Sum of Sinusoids} method, this one works based on a \textit{filtering} method.%
+%
+\begin{figure}[h!]
+	\centering
+	\input{img/diag_Komninakis.tex}
+\end{figure}
+
+The basic idea is the following: starting from a white process $w(t)$ (which has constant \textit{Power Spectral Density}), in principle it is possible to obtain a stochastic process $X(t)$ with arbitrary PSD filtering it through an \textit{LTI} system with frequency response $G_{\sqrt{PSD}}(f)$ since $P_X(f) = P_w |G_{\sqrt{PSD}}(f)|^2$, where the magnitude of the frequency response of the filter equals the square root of the desired PSD. In practice, though, it is not trivial to create a filter with arbitrary shape. In its paper, Komninakis proposes a way of approximating the magnitude of an IIR filter to a desired shape (in particular the classical PSD given by Clarke's model). There is one more problem to solve: particularly when modeling bit-level simulations, the sampling period $T$ may be much smaller than the \textit{coherence period} usually defined as $T_{coh}=\frac{1}{f_d}$. Equivalently, it means that the sampling frequency $F = \frac{1}{T} \gg f_d$, thus a very narrowband filter $g_{\sqrt{PSD}}$ would be required in order to correctly produce the desired output. It is widely known, though, that narrowband filters tend to require very high order which mean lots of calculations per sample to be done, very long transients and possible numerical instabilities given by the fact that poles have to be very close to the unit circle. This is definitely not the way to proceed. It is much wiser to compute only one or two filters with fixed values for the product $f_dT_p$ in order to balance order, stability and complexity, considering that an interpolation (or in general a rate conversion) will have to be done later. Note that the most correct way to proceed with the interpolation would be an up-sampling with zero padding followed by a low pass filter (either using low order IIR filter or a polyphase FIR filter). If the product $f_dT$ is small, though, it means that the channel will be slowly changing with respect to the chosen sampling period. This would allow us to use a simpler \textit{spline} interpolation.\\
+The big disadvantage of this simulator, then, becomes the high number of random variables needed. This depends, though, on the value of the product $f_dT_p$ for the reference shaping filter as well as the the actual product $f_dT$ needed.

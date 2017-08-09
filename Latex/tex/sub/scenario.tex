@@ -1,3 +1,10 @@
-\subsection{Scenario} % max 20 lines
+\subsection{Scenario and Implementation} % max 20 lines
 \label{subsec:scenario}
 
+The project has been implemented using MATLAB\textsuperscript{\textregistered} R2017a using the student license provided by the department.
+
+A separate function for each simulator has been created as well as the interface \texttt{createChannel} to create a realization of a channel with all different kinds of parameters, such as $f_d,\ T$, duration (either in number of samples, seconds or multiples of $T_{coh}$), type of simulator, number of oscillators (i.e. the parameter $M \approx N/4$ for most simulators), number of independent channels and the interpolation method for the Komninakis simulator (either by filtering, spline, pchip or linear interpolation).
+
+Separate functions for the computation of all the statistics required have been done and again all of them have multiple optional parameters to be set. Note that when talking about correlation I mean the statistical one. Hence, I also created a function that computes an estimate of the statistical correlations (all of those described in Eqs.~\ref{eqs:correlations}) given a number of independent channels (which can be easily created exploiting the Name-Value parameter \texttt{NChannels} from the function \texttt{createChannel}). The only exception to this rule is Jakes' simulator since it's fully deterministic. The standard temporal correlation has been used in this specific case.
+
+More functions were created in order to properly and simply plot all of the numerous statistics and to ensure a homogeneous look. Finally, different \texttt{mains} were created to obtain different types of results in an orderly manner and the possibility to store and load statistics has been added in order to promptly plot previously computed statistics.
