@@ -1,4 +1,4 @@
-function [samples,time] = computeSimulationTime(simulators,varargin)
+function [time,samples] = computeSimulationTime(simulators,varargin)
 %COMPUTESIMULATIONTIME Computes how much simulations take to produce their
 %output as a function of the number of samples to produce
 %
@@ -166,7 +166,8 @@ time = mean( timeList(1:i) );
 
 %% debug
 if true
-    fprintf('Sim=%s, prec=%.2f, Nsamp=%9d, i=%3d, time=%6.3f\n',sim,precision,sample,i,time);
+    fprintf('Sim=%s, interpMethod=%s, fdT=%.4f; prec=%.2f, Nsamp=%9d, i=%3d, time=%6.3f\n',...
+        sim,interpMethod,fd*T,precision,sample,i,time);
 end
 
 end

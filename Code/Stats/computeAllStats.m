@@ -46,12 +46,12 @@ duration = t(end)-t(1);
 switch simulator
     case 'Other'
         stats.pdf = computePdf( ch,pdfInd,binMethod ); % compute pdf on last sample
-        stats.xcorr = computeXcorr( ch,maxlag ); % compute all type of auto and cross correlation
+        stats.xcorr = computeXcorr( ch,t,maxlag ); % compute all type of auto and cross correlation
         stats.LCR = computeLCR( ch,duration,thresh ); % compute LCR
         stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
     case 'Jakes'
         stats.pdf = computePdf( ch(:,1).',pdfInd,binMethod ); % compute pdf on last sample
-        stats.xcorr = computeXcorr( ch,maxlag,'Jakes' ); % compute all type of auto and cross correlation
+        stats.xcorr = computeXcorr( ch,t,maxlag,'Jakes' ); % compute all type of auto and cross correlation
         stats.LCR = computeLCR( ch,duration,thresh ); % compute LCR
         stats.AFD = computeAFD( ch,T,thresh ); % compute AFD
     otherwise

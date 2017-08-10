@@ -20,11 +20,11 @@ Legend = {Legend{:}}; % row
 
 %% Plots
 fig = figure;
-loglog(0,0); % to keep the same colours, the other stats have an Ideal plot
+dummyLine = loglog(0,0); % to keep the same colours, the other stats have an Ideal plot
 hold on; grid on
 
 for i = 1:size(time,2)
-    loglog(samples,time(:,i));
+    loglog(samples,time(:,i),'DisplayName',Legend{i});
 end
 hold off
 
@@ -34,8 +34,8 @@ xlabel('#samples')
 ylabel('time [s]')
 xlim([min(samples) max(samples)])
 
-plotsWithLegend = fig.Children.Children(2:end); % first one is just a dummy plot
-legend(plotsWithLegend,Legend,'Location','northwest'); % do not display first entry
+legend('show')
+delete(dummyLine);
 
 %% Argument checker
     function inputCheck()

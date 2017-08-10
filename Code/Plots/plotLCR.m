@@ -6,9 +6,9 @@ function figure = plotLCR(LCR,legend,fd,varargin)
 %   ideal case, and then all of the others containined in the array of struct
 %   LCR. The input legend should contain a cell array of strings containing
 %   the legend with the same order (and number of elements) of LCR. Finally,
-%   fd is the maximum doppler frequency used to create the channels (it must
-%   be the same for all of them). The outuput figure contains a reference
-%   to the plotted figure.
+%   fd is the maximum doppler frequency used to create the channels (it can
+%   be either a scalar of a vector of the same length as LCR). The outuput
+%   figure contains a reference to the plotted figure.
 % figure = PLOTLCR(LCR,legend,fd,RMS) If the channel had a different RMS
 %   from 1, you can specify it as the fourth input.
 %
@@ -32,8 +32,7 @@ figure = plotlcr(LCR,legend,fd,RMS);
         
         p.addRequired('LCR',@(x)checkLcrStruct(x));
         p.addRequired('legend',@(x)iscellstr(x));
-        p.addRequired('fd',...
-            @(x)validateattributes(x,{'numeric'},{'positive','scalar'}));
+        p.addRequired('fd',@(x)checkfd(x,LCR));
         p.addOptional('RMS',1,...
             @(x)validateattributes(x,{'numeric'},{'positive','scalar'}));
         
@@ -59,6 +58,13 @@ vecOk = isvector(LCR);
 b = all([fieldsOk,vecOk]);
 
 end
+%------------------------------------------------------------------
+function b = checkfd(fd,LCR)
+
+validateattributes(fd,{'numeric'},{'nonempty','vector'});
+b = isscalar(fd) || (length(fd)==length(LCR));
+
+end
 
 % ------------------------------------------------------------------------
 function fig = plotlcr(LCR,leg,fd,RMS)
@@ -67,17 +73,18 @@ function fig = plotlcr(LCR,leg,fd,RMS)
 Xlim = 20*log10( [min(LCR(1).thresh) max(LCR(1).thresh)] );
 
 % ideal
-lam = @(x) 10.^(x/20);
-ideal = @(x) sqrt(2*pi)*fd*lam(x).*exp(-lam(x).^2);
+ideal = getIdeal(fd);
 
 fig = figure;
-fplot(ideal,Xlim,'k','LineWidth',1.5);
+plots = fplot(ideal,Xlim,'k','LineWidth',1.5);
 hold on; grid on;
+
+plots = plots(1); % keep only one
 
 % computed LCR
 for i = 1:length(LCR)
     lambda = 20*log10(LCR(i).thresh/RMS);
-    plot(lambda,LCR(i).values);
+    plots(1+i) = plot(lambda,LCR(i).values);
 end
 hold off
 
@@ -86,9 +93,21 @@ title('Level Crossing Rate')
 xlabel('\lambda_{dB}')
 ylabel('LCR(\lambda)')
 
-legend(['Ideal',leg],'Location','southeast');
+legend(plots,['Ideal',leg],'Location','southeast');
 
 % use log in y coordinate
 ax = gca;
 ax.YScale = 'log';
+end
+
+% ----------------------------------------------------------------
+function id = getIdeal(fd)
+
+uniquefd = unique(fd,'stable');
+lam = @(x) 10.^(x/20);
+
+for i = 1:length(uniquefd)
+    id{i} = @(x) sqrt(2*pi)*uniquefd(i)*lam(x).*exp(-lam(x).^2); %#ok<AGROW>
+end
+
 end
