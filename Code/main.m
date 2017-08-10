@@ -18,7 +18,7 @@ duration = 10; durationJakes = 1e4;
 nSin = 8;
 durationType = 'Tcoh';
 Nchannels = 1e3;
-interpMethod = 'spline';
+interpMethod = 'pchip';
 simList = {'Clarke','Jakes','PopBeaulieu','ZhengXiao2002',...
             'LiHuang','ZhengXiao2003','XiaoZhengBeaulieu',...
             'Komninakis'};
@@ -28,7 +28,7 @@ legend = simList;
 pdfInd = [];
 binMethod = 'auto';
 maxlag = 100;
-thresholds = logspace(-1.5,.5,25)';
+thresholds = logspace(-2,.5,25)';
 
 % computeSimulationTime parameters
 % simList,... same as createChannel
@@ -86,7 +86,7 @@ clear 'ch' 't'
 if loadSimTime
     load('SavedData/simTime');
 else
-    [samples,time] = computeSimulationTime(simList,precision,NsamplesList,...
+    [time,samples] = computeSimulationTime(simList,precision,NsamplesList,...
         'fd',fd,'T',T,'nSin',nSin,'interpMethod',interpMethod,...
         'PrecisionType',precisionType);
     
