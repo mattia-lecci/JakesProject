@@ -92,7 +92,7 @@ title('Average Fade Duration')
 xlabel('\lambda_{dB}')
 ylabel('AFD(\lambda)')
 
-legend(plots,['Ideal',leg],'Location','southeast');
+legend(plots,['Ideal',leg],'Location','northwest');
 
 % use log in y coordinate
 ax = gca;

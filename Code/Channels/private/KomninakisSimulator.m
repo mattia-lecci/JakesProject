@@ -71,9 +71,8 @@ ch(1:Nexcess,:) = [];
                 
                 ch = upfirdn(ch,b_lp,L)*L;
                 
-                % eliminate transient from low pass
-                ch(1:Nlp,:) = [];
-                ch(end-Nlp+1:end,:) = [];
+                % eliminate transients from low pass
+                ch([1:Nlp, end-Nlp+1:end],:) = [];
                 
             otherwise % interpolate with polynomials
                 

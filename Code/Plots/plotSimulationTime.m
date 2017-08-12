@@ -34,7 +34,7 @@ xlabel('#samples')
 ylabel('time [s]')
 xlim([min(samples) max(samples)])
 
-legend('show')
+legend('show','Location','northwest')
 delete(dummyLine);
 
 %% Argument checker

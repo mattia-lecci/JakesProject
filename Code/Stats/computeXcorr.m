@@ -61,7 +61,7 @@ switch simulator
         XCORR.XsXc = xc(lg>=0);
         [xc,lg] = xcorr(ch,ch,maxlag,'unbiased');
         XCORR.X = xc(lg>=0);
-        XCORR.lags = shiftdim( lg(lg>=0) )*T;
+        XCORR.timelags = shiftdim( lg(lg>=0) )*T;
         [xc,lg] = xcorr(abs(ch).^2,abs(ch).^2,maxlag,'unbiased');
         XCORR.X2 = xc(lg>=0);
     otherwise
