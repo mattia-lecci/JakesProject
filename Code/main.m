@@ -33,7 +33,7 @@ thresholds = logspace(-2,.5,25)';
 % computeSimulationTime parameters
 % simList,... same as createChannel
 precision = .1;
-NsamplesList = round( logspace(3,6,20)' );
+NsamplesList = round( logspace(3,7,25)' );
 precisionType = '%';
 
 
@@ -54,7 +54,7 @@ else
                 'DurationType',DTJakes,'NChannels',1,...
                 'InterpMethod',interpMethod);
             
-            stats(i).pdf = computePdf(ch.',1,binMethod);
+            stats(i).pdf = computePdf(ch.',1,binMethod,false);
             
             % xcorr
             clear 'ch' 't'
@@ -80,7 +80,7 @@ else
                     'DurationType',DTpdf,'NChannels',NchZH03,...
                     'InterpMethod',interpMethod);
                 
-                stats(i).pdf = computePdf(ch,durZH03,binMethod);
+                stats(i).pdf = computePdf(ch,durZH03,binMethod,false);
             else
                 % pdf
                 clear 'ch' 't'
@@ -88,7 +88,7 @@ else
                     'DurationType',DTpdf,'NChannels',NchPdf,...
                     'InterpMethod',interpMethod);
                 
-                stats(i).pdf = computePdf(ch,1,binMethod);
+                stats(i).pdf = computePdf(ch,1,binMethod,false);
             end
             
             % xcorr

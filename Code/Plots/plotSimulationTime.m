@@ -29,9 +29,9 @@ end
 hold off
 
 % aesthetic
-title('Simulation time')
-xlabel('#samples')
-ylabel('time [s]')
+title('Simulation time','Interpreter','latex','FontSize',18)
+xlabel('\#samples','Interpreter','latex')
+ylabel('time [s]','Interpreter','latex')
 xlim([min(samples) max(samples)])
 
 legend('show','Location','northwest')

@@ -12,6 +12,8 @@
 *.blg
 *.bcf
 *.bbl
+*.dpth
+*-eps-converted-to.pdf
 
 # Papers
 Reference/

@@ -88,9 +88,9 @@ end
 hold off
 
 % aesthetic
-title('Average Fade Duration')
-xlabel('\lambda_{dB}')
-ylabel('AFD(\lambda)')
+title('Average Fade Duration','Interpreter','latex','FontSize',18)
+xlabel('$\lambda_{dB}$','Interpreter','latex')
+ylabel('AFD($\lambda$)','Interpreter','latex')
 
 legend(plots,['Ideal',leg],'Location','northwest');
 

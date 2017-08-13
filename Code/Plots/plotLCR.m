@@ -89,9 +89,9 @@ end
 hold off
 
 % aesthetic
-title('Level Crossing Rate')
-xlabel('\lambda_{dB}')
-ylabel('LCR(\lambda)')
+title('Level Crossing Rate','Interpreter','latex','FontSize',18)
+xlabel('$\lambda_{dB}$','Interpreter','latex')
+ylabel('LCR($\lambda$)','Interpreter','latex')
 
 legend(plots,['Ideal',leg],'Location','south');
 
