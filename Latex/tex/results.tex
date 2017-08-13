@@ -1,3 +1,101 @@
 \section{Results} % min 7 pages
 \label{sec:results}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% PDFs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\hfill
+\begin{minipage}{.45\linewidth}
+	\includegraphics[width=\linewidth]{img/histMag.eps}
+\end{minipage}
+\hfill
+\begin{minipage}{.45\linewidth}
+	\includegraphics[width=\linewidth]{img/histPhase.eps}
+\end{minipage}
+\hfill
+
+\caption{Histograms of Magnitudes and Phases of all the implemented simulators. Note the aforementioned problem with ZhengXiao2003}
+\label{fig:histograms}
+\end{figure}
+
+Note that ZhengXiao2003 has a particularly zigzagy line since the first few samples did not respect the distributions. Computing more samples, then, didn't allow me to create as many channels as for the others due to memory limitations.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% Correlations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}
+	\hfill
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{img/XcXc.eps}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{img/XsXs.eps}
+	\end{minipage}
+	\hfill
+	
+	\vspace{2mm}
+	
+	\hfill
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{img/XcXs.eps}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{img/XsXc.eps}
+	\end{minipage}
+	\hfill
+	
+	\caption{Cross correlations between real and imaginary components}
+	\label{fig:4xcorr}
+\end{figure}
+
+\begin{figure}
+	\hfill
+	\begin{minipage}{.32\linewidth}
+		\includegraphics[width=\linewidth]{img/ReX.eps}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.32\linewidth}
+		\includegraphics[width=\linewidth]{img/ImX.eps}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.32\linewidth}
+		\includegraphics[width=\linewidth]{img/X2.eps}
+	\end{minipage}
+	\hfill
+	
+	\caption{Correlations of the channels}
+	\label{fig:3xcorr}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% LCR/AFD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+	\hfill
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{img/LCR.eps}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{img/AFD.eps}
+	\end{minipage}
+	\hfill
+	
+	\caption{Plots for threshold-based statistics. Note that $\lambda_{dB} \triangleq 20\, \log_{10} \lambda$ since it's envelope related, not power related}
+	\label{fig:LCR_AFD}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% Simulation Time
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+	\centering
+	\includegraphics[width=.6\linewidth]{img/simTime.eps}
+	
+	\caption{Simulation time for the different simulators}
+	\label{fig:simTime}
+\end{figure}

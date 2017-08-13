@@ -8,6 +8,7 @@
 \usepackage{epstopdf}
 \usepackage[pdftex]{graphicx}
 \usepackage[cmex10]{amsmath}
+\usepackage{amssymb}
 \usepackage{physics}
 % Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
 % thus preventing page breaks from occurring within multiline equations. Use:
@@ -37,6 +38,10 @@
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
 
+% to compile tikz pictures
+%\usetikzlibrary{external}
+%\tikzexternalize[prefix=img/compiled/]
+
 \usepackage{array}
 % http://www.ctan.org/tex-archive/macros/latex/required/tools/
 %\usepackage{mdwmath}
@@ -45,7 +50,7 @@
 %		   the standard version, and over the version in `array.sty'.
 % *** SUBFIGURE PACKAGES ***
 %\usepackage[tight,footnotesize]{subfigure}
-\usepackage{subfig}
+\usepackage{subfigure}
 
 \usepackage[top=1.5cm, bottom=2cm, right=1.6cm,left=1.6cm]{geometry}
 \usepackage{indentfirst}
@@ -82,7 +87,6 @@
 \begin{document}
 %\maketitle
 
-
 \input{tex/title_page}
 \newpage
 \input{tex/introduction}
@@ -91,7 +95,7 @@
 \input{tex/results}
 \input{tex/conclusions}
 
-
+\newpage
 \nocite{*}
 \printbibliography
 
