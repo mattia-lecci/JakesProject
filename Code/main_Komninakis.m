@@ -6,8 +6,8 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 
 %% Parameters
 % main parameters
-loadStats =     false;
-loadSimTime =   true;
+loadStats =     true;
+loadSimTime =   false;
 saveStats =     false;
 saveSimTime =   false;
 
@@ -32,7 +32,7 @@ thresholds = logspace(-2,.5,25)';
 % computeSimulationTime parameters
 % simList,... same as createChannel
 precision = .1;
-NsamplesList = round( logspace(3,6,20)' );
+NsamplesList = round( logspace(3,7,25)' );
 precisionType = '%';
 
 
