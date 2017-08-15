@@ -25,6 +25,7 @@ function [time,samples] = computeSimulationTime(simulators,varargin)
 % - InterpMethod: interpolation method to be used for Komninakis simulator.
 %       Default: 'spline'. See createChannel for more infomation.
 % - PrecisionType: {'%' (default), 'ms}
+% - Nchannels: number of independent channels to create. Default: 1
 %
 % See also: CREATECHANNEL
 
@@ -40,6 +41,7 @@ T = p.Results.T;
 nSin = p.Results.NSin;
 interpMethod = p.Results.InterpMethod;
 precisionType = p.Results.PrecisionType;
+Nch = p.Results.Nchannels;
 
 % init (force simulators to be cell array)
 if ischar(simulators)
@@ -53,7 +55,7 @@ checkChannelsAdded();
 for j = 1:length(simulators)
     for i = 1:length(samples)
         time(i,j) = computeTimePerSample( simulators{j},precision,...
-            samples(i),precisionType,fd,T,nSin,interpMethod );
+            samples(i),precisionType,fd,T,nSin,interpMethod,Nch );
     end
 end
     
@@ -82,6 +84,9 @@ end
             @(x)any(validatestring(x,interpMethodsList)));
         p.addParameter('PrecisionType','%',...
             @(x)any(validatestring(x,precisionTypeList)));
+        p.addParameter('Nchannels',1,...
+            @(x)validateattributes(x,{'numeric'},{'nonempty','positive',...
+            'scalar','integer'}));
         
         
         p.parse(simulators,varargin{:});
@@ -126,7 +131,7 @@ end
 end
 % ---------------------------------------------------------------------
 function time = computeTimePerSample( sim,precision,sample,...
-    precisionType,fd,T,nSin,interpMethod )
+    precisionType,fd,T,nSin,interpMethod,Nch )
 
 % init
 timeList = zeros(1000,1);
@@ -135,7 +140,7 @@ isCIok = false;
 
 % first one is slower
 createChannel(fd,T,sample,sim,nSin,'DurationType','samples',...
-        'interpMethod',interpMethod);
+        'interpMethod',interpMethod,'Nchannels',Nch);
 
 % compute
 while ~isCIok
@@ -149,14 +154,14 @@ while ~isCIok
     % compute channel and measure time
     tic
     createChannel(fd,T,sample,sim,nSin,'DurationType','samples',...
-        'interpMethod',interpMethod);
+        'interpMethod',interpMethod,'Nchannels',Nch);
     timeList(i) = toc;
     
     % check Confidence Interval
     if mod(i,10)==0
         [isCIok,timeList(1:i),i] = checkCI( timeList(1:i),precision,precisionType );
     end
-    if i>1e3 % to avoid long waits
+    if i>=1e3 % to avoid long waits
         isCIok = true;
     end
 end
@@ -166,7 +171,7 @@ time = mean( timeList(1:i) );
 
 %% debug
 if true
-    fprintf('Sim=%s, interpMethod=%s, fdT=%.4f; prec=%.2f, Nsamp=%9d, i=%3d, time=%6.3f\n',...
+    fprintf('Sim=%s, interpMethod=%s, fdT=%.4f, prec=%.2f, Nsamp=%9d, i=%3d, time=%6.3f\n',...
         sim,interpMethod,fd*T,precision,sample,i,time);
 end
 

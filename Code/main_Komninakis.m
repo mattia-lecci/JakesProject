@@ -7,7 +7,7 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 %% Parameters
 % main parameters
 loadStats =     true;
-loadSimTime =   false;
+loadSimTime =   true;
 saveStats =     false;
 saveSimTime =   false;
 
@@ -125,7 +125,7 @@ legend = cell(NfdT*Nint,1);
 % concatenate
 str_int = strcat(interpMethod,', ');
 for i = 1:NfdT
-    legend(n) = strcat(str_int,num2str(fdT(i)));
+    legend(n) = strcat(str_int,'$f_dT=',num2str(fdT(i)),'$');
     n = n + Nint;
 end
 % row
