@@ -24,7 +24,7 @@ legend = getLegend(simList,Nchannels);
 
 % computeSimulationTime parameters
 precision = .1;
-NsamplesList = round( logspace(3,5,20)' );
+NsamplesList = round( logspace(3,log10(2e6),18)' );
 precisionType = '%';
 
 %% computation
@@ -33,8 +33,8 @@ time = zeros( length(NsamplesList),length(simList),length(Nchannels) );
 if loadSimTime
     load('SavedData/multiSimTime');
 else
-    for j = 3:length(Nchannels)
-        for i = 3:length(simList)
+    for j = 1:length(Nchannels)
+        for i = 1:length(simList)
             
             time(:,i,j) = computeSimulationTime(simList{i},precision,NsamplesList,...
                 'fd',fd,'T',T,'nSin',nSin,'interpMethod',interpMethod,...
