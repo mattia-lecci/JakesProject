@@ -3,6 +3,11 @@ close all
 clc
 
 addpath('Channels','Misc','Plots','SavedData','Stats')
+% set 8 colors (as many as the simulators)
+set(groot,'defaultAxesColorOrder','default');
+set(groot,'defaultAxesColorOrder',...
+    [get(groot,'defaultAxesColorOrder');
+    .5 .5 .5]);
 
 %% Parameters
 % main parameters
@@ -21,7 +26,7 @@ interpMethod = 'pchip';
 simList = {'Clarke','Jakes','PopBeaulieu','ZhengXiao2002',...
     'LiHuang','ZhengXiao2003','XiaoZhengBeaulieu',...
     'Komninakis'};
-legend = simList;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+legend = simList;
 
 % LCR/AFD parameters
 thresholds = logspace(-2,.5,25)';

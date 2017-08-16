@@ -3,6 +3,11 @@ close all
 clc
 
 addpath('Channels','Misc','Plots','SavedData','Stats')
+% set 8 colors (as many as the simulators)
+set(groot,'defaultAxesColorOrder','default');
+set(groot,'defaultAxesColorOrder',...
+    [get(groot,'defaultAxesColorOrder');
+    .5 .5 .5]);
 
 %% Parameters
 % main parameters

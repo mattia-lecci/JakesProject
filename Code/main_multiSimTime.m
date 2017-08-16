@@ -52,6 +52,7 @@ end
 %% plot
 
 figSimTime = plotSimulationTime(NsamplesList,time,legend);
+adjustColors(figSimTime); % Jakes is not plotted => different colors
 
 %% Utility functions
 function legend = getLegend(simList,Nch)
@@ -65,6 +66,20 @@ legend{1} = [legend{1}, ', $N_{ch}=',num2str(Nch(1)),'$'];
 % add other Nch
 for i = 2:length(Nch)
     legend{end+1} = [simList{1}, ', $N_{ch}=',num2str(Nch(i)),'$'];
+end
+
+end
+% -------------------------------------------------------------------
+function adjustColors(fig)
+
+% init
+load('SavedData/multSimTime_colors');
+figure(fig)
+ch = get(gca,'Children');
+
+for i = 1:length(ch)
+    ind = mod(i-1,7)+1;
+    ch(end-i+1).Color = colors(ind,:);
 end
 
 end
