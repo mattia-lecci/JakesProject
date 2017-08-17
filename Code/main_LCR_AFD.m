@@ -61,5 +61,5 @@ else
 end
 %% plots
 
-figLCR = plotMultipleLCR(LCR,legend,fd);
-figAFD = plotMultipleAFD(AFD,legend,fd);
+figLCR = plotMultipleLCR(LCR,legend,fd); annotation('textarrow',[.54 .49],[.6 .9],'String','$\uparrow f_dT$','interpreter','latex')
+figAFD = plotMultipleAFD(AFD,legend,fd); annotation('textarrow',[.6 .67],[.45 .23],'String','$\uparrow f_dT$','interpreter','latex')

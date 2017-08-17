@@ -9,7 +9,7 @@ X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)
 %
 where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent, fo a total of $2 \times N$ random variables. Since in general many rays reach the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal ($\mathcal{CN}$) distribution. Actually the independence of real and imaginary part is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by symmetry of the distribution (given by the independence of real and imaginary part of the Complex Gaussian), the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
 %
-\begin{subequations}
+\begin{subequations} \label{eqs:pdfs}
 \begin{align}
 	f_{|X|}(x) = 2x \ e^{-x^2}, \quad x \geq 0\\
 	f_{\theta}(x) = \frac{1}{2\pi}, \quad x \in (-\pi,\pi]
@@ -24,7 +24,7 @@ As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to p
 &R_{X_cX_c}(\tau) = E[X_c(t)X_c(t-\tau)] = \frac{1}{2} J_0(2\pi f_d\tau)\\
 &R_{X_sX_s}(\tau) = \frac{1}{2} J_0(2\pi f_d\tau)\\
 &R_{X_cX_s}(\tau) = R_{X_sX_c}(\tau) = 0\\
-&R_X(\tau) = E[X(t) X^*(t-\tau)] = J_0(2\pi f_d \tau) + j0\\
+&R_X(\tau) = E[X(t) X^*(t-\tau)] = J_0(2\pi f_d \tau)\\
 &R_{|X|^2}(\tau) = 1 + J_0^2(2\pi f_d \tau)
 \end{align}
 \end{subequations}%
@@ -39,8 +39,8 @@ As you can see, all of these correlations are obtained from a \textit{Wide Sense
 Another two very interesting properties which can be extracted from Clarke's model are called \textit{Level Crossing Rate} (\textit{LCR}) and \textit{Average Fade Duration} (\textit{AFD}). They both characterize what happen at certain thresholds for the wireless channel and it's generally a higher order behavior: while LCR determines the rate at which the envelope crosses a thresholds with positive slope, AFD indicates for how long the channel will stay below the given threshold in average. They are clearly important parameters to consider when designing a wireless system and the appropriate channel coding. Ideally, their formulas are respectively:%
 %
 \begin{align}
-L_{|X|}(\lambda) &= \sqrt{2\pi} f_d \lambda e^{-\lambda^2}\\
-T_{|X|}(\lambda) &= \frac{e^{\lambda^2} - 1}{\sqrt{2\pi} f_d \lambda}
+L_{|X|}(\lambda) &= \sqrt{2\pi} f_d \lambda e^{-\lambda^2} \label{eq:LCR} \\
+T_{|X|}(\lambda) &= \frac{e^{\lambda^2} - 1}{\sqrt{2\pi} f_d \lambda} \label{eq:AFD}
 \end{align}%
 %
 where $\lambda$ is the normalized fading envelope threshold defined as $\lambda = |X_{thr}|/|X_{rms}|$. Since we are dealing with unit power simulations, then, $\lambda$ is simply equal to the threshold itself.
