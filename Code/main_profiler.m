@@ -8,12 +8,12 @@ addpath('Channels','Misc','Plots','SavedData','Stats')
 % createChannel parameters
 fd = 10;
 T = 0.01/fd;
-duration = 2e6;
+duration = 1e7;
 nSin = 8;
 durationType = 'samples';
-Nchannels = 100;
+Nchannels = 1;
 interpMethod = 'pchip';
-simulator = 'Komninakis';
+simulator = 'Clarke';
 
 %% Channel
 tic
