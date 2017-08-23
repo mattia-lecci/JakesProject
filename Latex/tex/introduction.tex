@@ -1,0 +1,12 @@
+\section{Introduction} % max 1 page
+\label{sec:introduction}
+
+Since the Seventies, simulating a good wireless channel was recognized to be fundamental for wireless systems design. It was acknowledged right from the start its simplicity, repeatability, cost effectiveness and overall convenience with respect to a channel sounding: no external expensive gear was required and a new simulation could be done in a matter of seconds or less.
+
+Early on, a simple yet fairly realistic channel model was presented by \textit{Clarke} \cite{clarke}, from which many different statistics were extrapolated and most of the later simulators took it as a design reference. A few years later, \textit{Jakes} created the de facto standard simulator \cite{jakes} for many years to follow. His proposal was to artificially impose certain symmetries to the incoming rays angles and phases, thus being able to simulate an approximation of \textit{Clarke}'s model but only with a fourth of the oscillators, making it much better performing. \textit{Jakes}' approach, though, had some problems and throughout the years many proposals (\cite{A1},\cite{A2},\cite{A3},\cite{C1},\cite{C2}) have been done in order to fix most, if not all of them.
+
+Finally, while proposing a new simulator, \textit{Xiao, Zheng} and \textit{Beaulieu} \cite{B1} recognized how well \textit{Clarke}'s model actually behaves even with a low number of sinusoidal components. In fact, they provided formulas proving how fast it converges to the ideal scenario, thus not needing as many oscillators as \textit{Jakes} actually thought.
+
+The report is structured as follow: in Section \ref{sec:technical_approach} I will present the technical aspects of the project, starting from Subsection \ref{subsec:objectives} which delineates the main objectives, then in Subsection \ref{subsec:math_models} the mathematical models of all the implemented simulators will be carefully described and in Subsection \ref{subsec:scenario} an outline of the code structure will be presented. Finally, in Subsection \ref{subsec:complications} I will briefly talk about a few complications encountered while completing this project. In Section \ref{sec:results}, then, the results will be presented and lastly in Section \ref{sec:conclusions} the conclusions will be drawn.
+
+The whole project, including MATLAB and \LaTeX \ code and some precomputed statistics can be found on GitHub, at \url{https://github.com/mattia-lecci/JakesProject}.

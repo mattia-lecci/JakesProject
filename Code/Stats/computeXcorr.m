@@ -1,12 +1,12 @@
-function XCORR = computeXcorr(ch,varargin)
+function XCORR = computeXcorr(ch,t,varargin)
 %COMPUTEXCORR Computes the statistical cross correlation of the given
 %channel using statisticalXcorr.m.
 %
-% XCORR = COMPUTEXCORR(ch) Considers the columns of ch as realizations of a
+% XCORR = COMPUTEXCORR(ch,t) Considers the columns of ch as realizations of a
 %   channel and estimates its statistical correlations.
-% XCORR = COMPUTEXCORR(ch,maxlag) You can decide to compute the
+% XCORR = COMPUTEXCORR(ch,t,maxlag) You can decide to compute the
 %   correlations up to a lower maximum lag.
-% XCORR = COMPUTEXCORR(ch,maxlag,simulator) If the given channel is the
+% XCORR = COMPUTEXCORR(ch,t,maxlag,simulator) If the given channel is the
 %   output of a Jakes simulator, specify the input simulator as 'Jakes'.
 %   For any other type of simulator, specify 'Other'.
 %
@@ -17,7 +17,7 @@ function XCORR = computeXcorr(ch,varargin)
 % y, the output of the function COMPUTEXCORR is a structure containing the
 % following fields:
 %
-% - XCORR.lags containing the lags at which all the following correlations
+% - XCORR.timelags containing the lags at which all the following correlations
 %   are computed
 % - XCORR.XcXc containing R_XcXc
 % - XCORR.XsXs containing R_XsXs
@@ -36,6 +36,9 @@ inputCheck();
 maxlag = p.Results.maxlag;
 simulator = p.Results.simulator;
 
+% init
+T = t(2)-t(1);
+
 %% computations
 switch simulator
     case 'Other'
@@ -43,8 +46,10 @@ switch simulator
         XCORR.XsXs = statisticalXcorr(imag(ch),imag(ch),maxlag);
         XCORR.XcXs = statisticalXcorr(real(ch),imag(ch),maxlag);
         XCORR.XsXc = statisticalXcorr(imag(ch),real(ch),maxlag);
-        [XCORR.X,XCORR.lags] = statisticalXcorr(ch,ch,maxlag);
+        [XCORR.X,lags] = statisticalXcorr(ch,ch,maxlag);
         XCORR.X2 = statisticalXcorr(abs(ch).^2,abs(ch).^2,maxlag);
+        
+        XCORR.timelags = shiftdim(lags)*T;
     case 'Jakes' % only temporal correlation is possible
         [xc,lg] = xcorr(real(ch),real(ch),maxlag,'unbiased');
         XCORR.XcXc = xc(lg>=0);
@@ -56,7 +61,7 @@ switch simulator
         XCORR.XsXc = xc(lg>=0);
         [xc,lg] = xcorr(ch,ch,maxlag,'unbiased');
         XCORR.X = xc(lg>=0);
-        XCORR.lags = lg(lg>=0);
+        XCORR.timelags = shiftdim( lg(lg>=0) )*T;
         [xc,lg] = xcorr(abs(ch).^2,abs(ch).^2,maxlag,'unbiased');
         XCORR.X2 = xc(lg>=0);
     otherwise
@@ -68,13 +73,15 @@ end
         
         p.addRequired('ch',...
             @(x)validateattributes(x,{'numeric'},{'nonempty','2d'}));
+        p.addRequired('t',...
+            @(x)validateattributes(x,{'numeric'},{'vector','numel',size(ch,1)}));
         p.addOptional('maxlag',size(ch,1)-1,...
             @(x)validateattributes(x,{'numeric'},{'nonempty','nonnegative',...
             'scalar','integer','<',size(ch,1)}));
         p.addOptional('simulator','Other',...
             @(x)any(validatestring(x,{'Jakes','Other'})));
         
-        p.parse(ch,varargin{:});
+        p.parse(ch,t,varargin{:});
         
     end
 end
