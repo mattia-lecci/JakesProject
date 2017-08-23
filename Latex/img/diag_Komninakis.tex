@@ -1,0 +1,21 @@
+\begin{tikzpicture}[auto, thick, node distance=5cm, >=triangle 45]
+% Definition of blocks:
+\tikzset{%
+	block/.style = {draw, thick, rectangle, minimum height = 3em,
+		minimum width = 6em},
+	input/.style = {coordinate}, % Input
+	output/.style = {coordinate} % Output
+}
+
+% nodes
+\draw node[block, name=gen, label={Complex RNG}] {$\mathcal{CN}(0,1)$};
+\draw node[block, name=filt, right of=gen, label={Shaping filter}] {$g_{\sqrt{PSD}}(nT_p)$};
+\draw node[block, name=interp, right of=filt, label={Rate Converter}] {$\uparrow L \downarrow M$};
+\draw node[output, name=out, right of=interp, node distance=3cm] {};
+
+% links
+\draw[->] (gen) -- node[anchor=south]{$w(nT_p)$} (filt);
+\draw[->] (filt) -- node[anchor=south]{$X(nT_p)$} (interp);
+\draw[->] (interp) -- node[anchor=south]{$X(nT)$} (out);
+
+\end{tikzpicture}

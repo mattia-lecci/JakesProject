@@ -1,20 +1,16 @@
-function plots = plotAFD(AFD,legend,fd,varargin)
+function figure = plotAFD(AFD,legend,fd,varargin)
 %PLOTAFD Plots the Average Fade Duration given as output from computeAFD
 %
-% plots = PLOTAFD(AFD,legend,fd) Plots all of the precalculated AFD from the
+% figure = PLOTAFD(AFD,legend,fd) Plots all of the precalculated AFD from the
 %   function computeAFD, plotting first a thick black line representing the
 %   ideal case, and then all of the others containined in the array of struct
 %   AFD. The input legend should contain a cell array of strings containing
 %   the legend with the same order (and number of elements) of AFD. Finally,
-%   fd is the maximum doppler frequency used to create the channels (it must
-%   be the same for all of them).
-% plots = PLOTAFD(AFD,legend,fd,RMS) If the channel had a different RMS
+%   fd is the maximum doppler frequency used to create the channels it can
+%   be either a scalar of a vector of the same length as AFD). The outuput
+%   figure contains a reference to the plotted figure.
+% figure = PLOTAFD(AFD,legend,fd,RMS) If the channel had a different RMS
 %   from 1, you can specify it as the fourth input.
-%
-% OUTPUT: plots is a vector with length(AFD)+1 number of elements. The
-%   first element is a FunctionLine object handle (Ideal case), and the
-%   others in order contain Line object handles in order for each of the
-%   elements in AFD.
 %
 % See also: COMPUTEAFD
 
@@ -25,16 +21,18 @@ inputCheck();
 % name inputs
 RMS = p.Results.RMS;
 
+% init
+legend = {legend{:}}; % row
+
 %% Plot
-plots = plotafd(AFD,legend,fd,RMS);
+figure = plotafd(AFD,legend,fd,RMS);
 
 %% Argument checker
     function inputCheck()
         
         p.addRequired('AFD',@(x)checkAfdStruct(x));
         p.addRequired('legend',@(x)iscellstr(x));
-        p.addRequired('fd',...
-            @(x)validateattributes(x,{'numeric'},{'positive','scalar'}));
+        p.addRequired('fd',@(x)checkfd(x,AFD));
         p.addOptional('RMS',1,...
             @(x)validateattributes(x,{'numeric'},{'positive','scalar'}));
         
@@ -60,36 +58,56 @@ vecOk = isvector(AFD);
 b = all([fieldsOk,vecOk]);
 
 end
+%------------------------------------------------------------------
+function b = checkfd(fd,AFD)
 
+validateattributes(fd,{'numeric'},{'nonempty','vector'});
+b = isscalar(fd) || (length(fd)==length(AFD));
+
+end
 % ------------------------------------------------------------------------
-function plots = plotafd(AFD,leg,fd,RMS)
+function fig = plotafd(AFD,leg,fd,RMS)
 
 % init
 Xlim = 20*log10( [min(AFD(1).thresh) max(AFD(1).thresh)] );
 
 % ideal
-lam = @(x) 10.^(x/20);
-ideal = @(x) ( exp(lam(x).^2)-1 )./( sqrt(2*pi)*fd*lam(x) );
+ideal = getIdeal(fd);
 
-figure
-plots(1) = fplot(ideal,Xlim,'k','LineWidth',1.5);
+fig = figure;
+plots = fplot(ideal,Xlim,'k','LineWidth',1.5);
 hold on; grid on;
+
+plots = plots(1); % keep only one
 
 % computed LCR
 for i = 1:length(AFD)
     lambda = 20*log10(AFD(i).thresh/RMS);
-    plots(i+1) = plot(lambda,AFD(i).values); %#ok<AGROW>
+    plots(1+i) = plot(lambda,AFD(i).values);
 end
 hold off
 
 % aesthetic
-title('Average Fade Duration')
-xlabel('\lambda_{dB}')
-ylabel('AFD(\lambda)')
+title('Average Fade Duration','Interpreter','latex','FontSize',18)
+xlabel('$\lambda_{dB}$','Interpreter','latex')
+ylabel('AFD($\lambda$)','Interpreter','latex')
 
-legend(['Ideal',leg]);
+legend(plots,['Ideal',leg],'Location','northwest');
 
 % use log in y coordinate
 ax = gca;
 ax.YScale = 'log';
+
+end
+
+% ----------------------------------------------------------------
+function id = getIdeal(fd)
+
+uniquefd = unique(fd,'stable');
+lam = @(x) 10.^(x/20);
+
+for i = 1:length(uniquefd)
+    id{i} = @(x) ( exp(lam(x).^2)-1 )./( sqrt(2*pi)*uniquefd(i)*lam(x) ); %#ok<AGROW>
+end
+
 end

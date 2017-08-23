@@ -4,7 +4,7 @@ function ch = ZhengXiao2002Simulator(fd,t,nSin,nChannels)
 % See also: CREATECHANNEL
 
 %% create channels
-[alpha,phi,phi1] = getVariables(nSin,nChannels);
+[alpha,phic,phis] = getVariables(nSin,nChannels);
 
 % init
 ch = zeros( size(t,1),nChannels );
@@ -18,8 +18,8 @@ end
     function ch = computeChannel(k)
         
         ch = sqrt(1/nSin)*(...
-            sum( cos( 2*pi*fd*cos( alpha(k,:) ).*t + phi(k,:) ) ,2) +...
-         1j*sum( cos( 2*pi*fd*sin( alpha(k,:) ).*t + phi1(k,:) ) ,2)...
+            sum( cos( 2*pi*fd*cos( alpha(k,:) ).*t + phic(k,:) ) ,2) +...
+         1j*sum( cos( 2*pi*fd*sin( alpha(k,:) ).*t + phis(k,:) ) ,2)...
                                 );
 
     end

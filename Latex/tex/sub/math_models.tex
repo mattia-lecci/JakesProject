@@ -1,0 +1,137 @@
+\subsection{Mathematical models used} % no limits given
+\label{subsec:math_models}
+
+Almost all of the reference papers start by introducing the ideal statistical properties that a Rayleigh channel should have, obtained for the classical model of such channel. This model is presented in \cite{clarke} and it is often referred to as \textbf{Clarke}'s 2D isotropic (both scattering and antenna gain) Rayleigh fading model, given by%
+%
+\begin{equation}
+X(t) = \frac{1}{\sqrt{N}} \sum_{n=1}^{N} e^{j(2\pi f_d \cos \alpha_n t + \phi_n)}
+\end{equation}%
+%
+where N is the number of propagation paths, $f_d$ is the maximum Doppler frequency, $\alpha_n$ is the angle of arrival of the $n$-th ray and $\phi_n$ its initial phase. Both $\alpha_n$ and $\phi_n$ are uniformly distributed in $(-\pi,\pi]$ for all $n$ and they are mutually independent, for a total of $2 \times N$ random variables. Since in general a huge number of rays reaches the receiver at the same time, the \textit{Central Limit Theorem} (\textit{CLT}) justifies the approximation of the channel to a Complex Normal ($\mathcal{CN}$) distribution. To be honest, the independence of real and imaginary part (which is implied in the definition of \textit{Complex Normal} distribution) is not trivial, but it will not be further clarified here. From this, we know that the magnitude of a Complex Normal random variable yields a Rayleigh distributed one (since it's equivalent to the euclidean norm of a 2D Gaussian random vector) and, by the symmetry of the distribution, the phase is uniformly distributed in $(-\pi,\pi]$. In formulas,%
+%
+\begin{subequations} \label{eqs:pdfs}
+\begin{align}
+	f_{|X|}(x) = 2x \ e^{-x^2}, \quad x \geq 0\\
+	f_{\theta}(x) = \frac{1}{2\pi}, \quad x \in (-\pi,\pi]
+\end{align}
+\end{subequations}%
+%
+As $N$ tends to infinity, defining $X(t) = X_c(t) + jX_s(t)$ it is possible to prove the following correlations:%
+%
+\begin{subequations}
+	\label{eqs:correlations}
+\begin{align}
+&R_{X_cX_c}(\tau) = E[X_c(t)X_c(t-\tau)] = \frac{1}{2} J_0(2\pi f_d\tau)\\
+&R_{X_sX_s}(\tau) = \frac{1}{2} J_0(2\pi f_d\tau)\\
+&R_{X_cX_s}(\tau) = R_{X_sX_c}(\tau) = 0\\
+&R_X(\tau) = E[X(t) X^*(t-\tau)] = J_0(2\pi f_d \tau)\\
+&R_{|X|^2}(\tau) = 1 + J_0^2(2\pi f_d \tau)
+\end{align}
+\end{subequations}%
+%
+Where $J_0(x)$ is the zero-order Bessel function of the first kind, defined as%
+%
+\begin{equation}
+J_0(x) = \frac{1}{\pi} \int_0^\pi \cos( x \ \cos\theta) \dd{\theta}
+\end{equation}%
+%
+As you can see, all of these correlations are obtained from a \textit{Wide Sense Stationary} (\textit{WSS}) process, since they only depend on the variable $\tau$.\\
+Another two very interesting properties which can be extracted from \textit{Clarke}'s model are called \textit{Level Crossing Rate} (\textit{LCR}) and \textit{Average Fade Duration} (\textit{AFD}). They both characterize what happen at certain thresholds for the wireless channel and it's generally a higher order behavior: while \textit{LCR} determines the rate at which the envelope crosses a thresholds with positive slope, \textit{AFD} indicates for how long the channel will stay below the given threshold in average. They are clearly important parameters to consider when designing a wireless system, in particular when designing an appropriate channel coding. Ideally, their formulas are respectively:%
+%
+\begin{align}
+L_{|X|}(\lambda) &= \sqrt{2\pi} f_d \lambda e^{-\lambda^2} \label{eq:LCR} \\
+T_{|X|}(\lambda) &= \frac{e^{\lambda^2} - 1}{\sqrt{2\pi} f_d \lambda} \label{eq:AFD}
+\end{align}%
+%
+where $\lambda$ is the normalized fading envelope threshold defined as $\lambda = |X_{thr}|/|X_{rms}|$. Since we are dealing with unit power simulations, then, $\lambda$ is simply equal to the threshold itself.
+
+% ----------------------------------------------------------------------
+% Jakes
+%-----------------------------------------------------------------------
+Since \textit{Clarke}'s model deals with multiple complex sinusoids and random variables, which are both computationally expansive to calculate, \textbf{Jakes} proposed in \cite{jakes} its well known simplification of such model, which basically became a standard for wireless channel simulation for over 20 years. In order to cut down on computational complexity he makes some assumptions: instead of being random variables, he forces $\alpha_n = \frac{2\pi n}{N}$ and correlates $\phi_n$ in quadruplets to obtain the following simplified model:%
+%
+\begin{subequations}
+\begin{align}\label{eq:jakes_xc}
+X_c(t) &= \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\cos \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]\\
+\label{eq:jakes_xs}
+X_s(t) &= \sqrt{\frac{2}{N}} \left[ \cos(2\pi f_d t) + \sum_{n=1}^{M} 2\sin \left( \frac{\pi n}{M} \right) \cos( 2\pi f_d \cos \alpha_n \ t) \right]
+\end{align}
+\end{subequations}%
+%
+You can see that the model is now fully deterministic and there are about a quarter of the oscillators of the corresponding Clarke's model. In fact, by defining $N = 4M+2$, there are only $M+1$ low frequency oscillators needed. Note that the directions with maximum Doppler spread are forcefully kept.
+
+% ----------------------------------------------------------------------
+% Pop Beaulieu
+%-----------------------------------------------------------------------
+This, though, comes at a price: \textbf{Pop} and \textbf{Beaulieu} state in \cite{A1} that Jakes' simulator is not even stationary and yields poor higher order statistics. To overcome this phenomena, a simple modification is proposed: the addition of an initial random phase to the low frequency oscillators. From Eqs.~\ref{eq:jakes_xc},\ref{eq:jakes_xs} the oscillator terms become: $\cos(2\pi f_d t + \phi_0)$ and $\cos( 2\pi f_d \cos \alpha_n \ t + \phi_n)$, where $\phi_n$ ($n=0,...,M$) are mutually independent uniform random variables in $(-\pi,\pi]$.\\
+Now, a small modification that I did with respect to the original paper is the addition of the multichannel support. This may be useful in different interesting scenarios: multiple independent channels are usually used to model frequency selective fading and MIMO systems. I, instead, used this feature to estimate all the statistics of the simulators without relying on any kind of ergodicity. For the case of \textit{Pop-Beaulieu}'s simulator, this addition is very simple: calling $X_k(t)$ the $k$-th channel ($k=0,1,...,K-1$), we just need to generate $K \times(M+1)$ random variables $\phi_{k,n}$.
+
+% ----------------------------------------------------------------------
+% Zheng Xiao 2002
+%-----------------------------------------------------------------------
+In 2002, \textbf{Zheng} and \textbf{Xiao} \cite{C2} propose a novel simulator directly considering the multichannel scenario. The following formulas are given:%
+%
+\begin{subequations}
+\begin{align}
+X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(c)} \right)\\
+X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \sin \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_{n,k}^{(s)} \right)
+\end{align}
+\end{subequations}%
+%
+where $\theta_k, \ \phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$, for a total of $K \times (2M+1)$ random variables. This ensures that all the channels have the same statistical properties while being uncorrelated. Note that with respect to the \textit{Pop-Beaulieu} model it adds randomness on the angle of arrival $\alpha_n$ and uncorrelates the initial phases of real and imaginary components, while not retaining the angles with maximum Doppler spread, having then $N=4M$. This means more than double the quantity of random variables required to perform the simulation, but a similar number of oscillators.
+
+% ----------------------------------------------------------------------
+% Li Huang
+%-----------------------------------------------------------------------
+Later in 2002, \textbf{Li} and \textbf{Huang} \cite{C1} proposed another multichannel simulator. Instead of randomizing the directions of arrival, they follow a deterministic approach, similar to \textit{Jakes}'. Defining $\alpha_{n,k} = \frac{2\pi n}{N} + \frac{2 \pi k}{NK} + \alpha_{0,0}$ for $n = 0,...,M-1$ and $k=0,...,K-1$, the formulas for the $k$-th ray are:%
+%
+\begin{subequations}
+\begin{align}
+X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \cos \qty( 2\pi f_d t \cos \alpha_{n,k} + \phi_{n,k}^{(c)} )\\
+X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=0}^{M-1} \sin \qty( 2\pi f_d t \sin \alpha_{n,k} + \phi_{n,k}^{(s)} )
+\end{align}
+\end{subequations}%
+%
+as usual $\phi_{n,k}^{(c)}$ and $\phi_{n,k}^{(s)}$ are mutually independent random variables uniformly distributed in $(-\pi,\pi]$, for a total of $2\times M \times K$ random variables. It is highlighted the fact that any combination of sine and cosine functions will not affect the actual statistics of the channels. The choice $\alpha_{0,0}$ is suggested by the authors to be in $\qty(0,\frac{2\pi}{NK}) \setminus \qty{\frac{\pi}{NK}}$. In the end I decided to use their same initial angle, meaning $\alpha_{0,0} = \frac{\pi}{2NK}$. The paper then also tries to reduce the high cost of calculating trigonometric functions by proposing different approximations and comparing then the results. I decided, though, to not implement this further in-depth analysis.
+
+% ----------------------------------------------------------------------
+% Zheng Xiao 2003
+%-----------------------------------------------------------------------
+Going on to 2003, \textbf{Zheng} and \textbf{Xiao} \cite{A2} further enhance their simulator by adding a random gain to each oscillator:%
+%
+\begin{subequations}
+\begin{align}
+X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)\\
+X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin(\psi_{n,k})\cos \left( 2\pi f_d t \cos \left( \frac{2\pi n - \pi + \theta_k}{4M}\right) + \phi_k \right)
+\end{align}
+\end{subequations}%
+%
+Note that the randomization of the angle of arrival is just the same as their 2002 paper but there are a couple of differences: the initial phase of the oscillators is now constant for all of the oscillators of the same channel (and equal for real and imaginary parts, similarly to the \textit{Pop-Beaulieu} model), whereas the difference between oscillators of the same channel is given by the random amplitude, which, even though it's different, it is correlated between real and imaginary components ($\psi_{n,k}$ is the same for both of them). A total of $K \times (M+2)$ random variables is needed.
+
+% ----------------------------------------------------------------------
+% Xiao Zheng Beaulieu
+%-----------------------------------------------------------------------
+In 2006, the most recent paper about \textit{Sum of Sinusoids} simulator that I considered was written by \textbf{Xiao}, \textbf{Zheng} and \textbf{Beaulieu} \cite{B1}. Once again, the simulator is a \textit{SoS} and introduces slight differences with respect to the others%
+%
+\begin{subequations}
+	\begin{align}
+	X_{k,c}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \cos \left( 2\pi f_d t \cos \left( \frac{2\pi n  + \theta_{n,k}}{M}\right) + \phi_{n,k} \right)\\
+	X_{k,s}(t) &= \frac{1}{\sqrt{M}} \sum_{n=1}^{M} \sin \left( 2\pi f_d t \cos \left( \frac{2\pi n  + \theta_{n,k}}{M}\right) + \phi_{n,k} \right)
+	\end{align}
+\end{subequations}%
+%
+The main differences with previous models are: no random amplitude for the oscillators is present, both $\theta$ and $\phi$ are independent between channels and oscillators (with a total number of $2 \times K \times M$ random variables required) although they are the same for real and imaginary components, the angle of arrival $\alpha_{n,k}$ has changed using only $M$ instead of $4M$ as the denominator. Similarly to the 2 previous papers from Zheng and Xiao, the angle of arrival is randomized but within sectors, in order to force a "more uniform" distribution, particularly for small values of $M$, with respect to the pure uniform distribution of the original Clarke's model.
+
+% ----------------------------------------------------------------------
+% Komninakis
+%-----------------------------------------------------------------------
+As the last one, I decided to keep the \textbf{Komninakis} simulator \cite{A3} since it's completely different from all the others, even though it's actually from 2003. In fact, while all the previous ones are based on the \textit{Sum of Sinusoids} method, this one works based on a \textit{filtering} method.%
+%
+\begin{figure}[h!]
+	\centering
+	\input{img/diag_Komninakis.tex}
+	\caption{Block diagram for \textit{Komninakis'} simulator}
+\end{figure}
+
+The basic idea is the following: starting from a white process $w(t)$ (which has constant \textit{Power Spectral Density}), in principle it is possible to obtain a stochastic process $X(t)$ with arbitrary PSD filtering it through an LTI system with frequency response $G_{\sqrt{PSD}}(f)$ since $\mathcal{P}_X(f) = \mathcal{P}_w |G_{\sqrt{PSD}}(f)|^2$, where the magnitude of the frequency response of the filter equals the square root of the desired PSD. In practice, though, it is not trivial to create a filter with arbitrary shape. In its paper, Komninakis proposes a way of approximating the magnitude of an IIR filter to a desired shape (in particular the classical PSD given by Clarke's model). There is one more problem to solve: particularly when modeling bit-level simulations, the sampling period $T$ may be much smaller than the \textit{coherence period} usually defined as $T_{coh}=\frac{1}{f_d}$. Equivalently, it means that the sampling frequency $F = \frac{1}{T} \gg f_d$, thus a very narrowband filter $G_{\sqrt{PSD}}$ would be required in order to correctly produce the desired output. It is widely known, though, that narrowband filters tend to require very high order which mean lots of calculations per sample to be done, very long transients and possible numerical instabilities given by the fact that poles have to be very close to the unit circle. This is definitely not the way to proceed. It is much wiser to filter at a much higher period $T_p$, computing only one or two filters with fixed values for the product $f_dT_p$ in order to balance order, stability and complexity, considering that an interpolation (or in general a rate conversion) will have to be done later. Note that the most correct way to perform the interpolation would be an up-sampling with zero padding followed by a low pass filter (either using low order IIR filter or a polyphase FIR filter). If the product $f_dT_p$ is small, though, it means that the channel will be slowly changing with respect to the chosen sampling period. This would allow us to use a simpler piecewise polynomial interpolation.\\
+The big disadvantage of this simulator, then, becomes the high number of random variables needed. This depends, though, on the value of the product $f_dT_p$ for the reference shaping filter as well as the the actual product $f_dT$ needed. It, then, depends linearly on both the number of channels and length of the simulation required. One last thing to notice is that, if using a low pass filter for the interpolation, it has to be designed every time since any $f_dT$ product could be requested. For long simulations, though, a class instead of a function could be made so that filters would be designed only once and small pieces of channel could be computed one after the other in order to obtain simulations as long as necessary without incurring in huge memory requirements. Furthermore, adding the initial conditions for the filters as properties of the class, the obtained channel would really look like a single long continuous realization instead of multiple short disconnected ones.

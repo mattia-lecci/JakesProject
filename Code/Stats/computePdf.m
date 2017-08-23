@@ -10,6 +10,11 @@ function pdf = computePdf(ch,varargin)
 % pdf = COMPUTEPDF(ch,ind,binMethod) Allows you to choose the binning
 %   method of histcounts from: 'auto' (default), 'scott', 'fd', 'integers',
 %   'sturges', 'sqrt'
+% pdf = COMPUTEPDF(ch,ind,binMethod,computeFit) Logical for whether you
+%   want to fit a Rayleigh distribution or not. Recall that fitting the
+%   distribution, the returned RayleighDistribution object also contains
+%   all of the samples used to fit, hence for a high number of samples it's
+%   very memory inefficient.
 %
 % NOTE: No uniform distribution fit is available in matlab, that's why
 % phase.fit is not present
@@ -35,12 +40,15 @@ inputCheck();
 % name inputs
 binMethod = p.Results.binMethod;
 ind = p.Results.ind;
+computeFit = p.Results.computeFit;
 
 %% fit pdf
 N = length(ind);
 for i = N:-1:1 % to avoid preallocation
     % magnitude
-    pdf(i).magnitude.fit = fitdist( abs(ch(ind(i),:)).', 'Rayleigh' );
+    if computeFit
+        pdf(i).magnitude.fit = fitdist( abs(ch(ind(i),:)).', 'Rayleigh' );
+    end
     [pdf(i).magnitude.normBinCount,pdf(i).magnitude.edges] =...
         histcounts( abs(ch(ind(i),:)), 'Normalization','pdf','BinMethod',binMethod);
     
@@ -60,6 +68,8 @@ end
             @(x)validateattributes(x,{'numeric'},{'vector','positive','integer'}));
         p.addOptional('binMethod','auto',...
             @(x)any(validatestring(x,validBinMethods)));
+        p.addOptional('computeFit',true,...
+            @(x)validateattributes(x,{'logical'},{'scalar'}));
         
         p.parse(ch,varargin{:});
         
